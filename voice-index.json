@@ -43,6 +43,15 @@
       "sampleRate": 24000,
       "channels": 1
     },
+    "358298b900229d374ef7e367330abb44dc26165dd3038b99818e1246b5dc780a": {
+      "text": "질감도 상담해요. 질환·틀니·삼킴 불편·영양상태에 따라 맞는 식사가 달라요. 의료진의 개인별 지시가 우선이에요. 두부. 콩제품으로 고를 수 있는 단백질 식품이에요. 달걀. 식사에 곁들일 수 있는 단백질 식품이에요. 생선. 단백질 식품의 한 가지 예예요. 채소. 여러 반찬으로 골고루",
+      "src": "./voice-clips/358298b900229d374ef7e367330abb44dc26165dd3038b99818e1246b5dc780a.mp3",
+      "bytes": 158829,
+      "durationSeconds": 19.824,
+      "codec": "mp3",
+      "sampleRate": 24000,
+      "channels": 1
+    },
     "4b95528df0a182d42c13d36224d5efdc96665bf7ed4a77b34aa763a57552c887": {
       "text": "달력이에요. 날짜를 골라 일정을 확인하거나 직접 적을 수 있어요. 개인 일정의 제목, 이름과 내용은 음성으로 읽지 않아요.",
       "src": "./voice-clips/4b95528df0a182d42c13d36224d5efdc96665bf7ed4a77b34aa763a57552c887.mp3",
@@ -52,11 +61,47 @@
       "sampleRate": 24000,
       "channels": 1
     },
+    "5f8007d81f65e1e2c8a7a715259814738b88320923ba8e7b83b013c06e018f92": {
+      "text": "없다고 안전한 것은 아니에요. 참고 자료. 질병관리청, 심뇌혈관질환 대국민 인식 개선 · 조기증상과 대응요령. 자료 확인일 2026-10-23. 참고 링크는 인터넷이 필요해요.",
+      "src": "./voice-clips/5f8007d81f65e1e2c8a7a715259814738b88320923ba8e7b83b013c06e018f92.mp3",
+      "bytes": 108909,
+      "durationSeconds": 13.584,
+      "codec": "mp3",
+      "sampleRate": 24000,
+      "channels": 1
+    },
     "601c2df00870207adb889963493eda1e23392b76c5dcd2405ef180d1aa64cb96": {
       "text": "오늘의 팬 놀이터예요. 현재 시간대의 AI 인사 듣기는 직접 눌러 시작해요. 함께 걷기, 앉아서 스트레칭, 건강 길잡이, 노래와 퀴즈, 사진 놀이를 고를 수 있어요. 실제 임영웅의 녹음이나 발언이 아닌 합성 안내예요.",
       "src": "./voice-clips/601c2df00870207adb889963493eda1e23392b76c5dcd2405ef180d1aa64cb96.mp3",
       "bytes": 108909,
       "durationSeconds": 13.584,
+      "codec": "mp3",
+      "sampleRate": 24000,
+      "channels": 1
+    },
+    "73b530282721d04147ea243d4ca38fc8c29de0f926893f7155efa5b3bd84e559": {
+      "text": "골고루 먹어요. 두부·달걀·생선 같은 단백질 식품도 식사에 곁들여요. 질환·틀니·삼킴 불편·영양상태에 맞는 식사는 의료진과 정해요. 아래는 식품 예시이지 모두에게 맞는 식단은 아니에요. 콩팥병 등으로 식사 지시를 받았다면 그 지시가 우선이에요. 씹거나 삼키기 어렵다면 음식 크기와",
+      "src": "./voice-clips/73b530282721d04147ea243d4ca38fc8c29de0f926893f7155efa5b3bd84e559.mp3",
+      "bytes": 169581,
+      "durationSeconds": 21.168,
+      "codec": "mp3",
+      "sampleRate": 24000,
+      "channels": 1
+    },
+    "88fa41ab1f46236fbb3c08df8ec7c149f72c20383723c5738e223f406fc20c3c": {
+      "text": "먹는 식품의 예예요. 참고 자료. 서울아산병원, 노인식. 서울아산병원, 만성신부전식. 자료 확인일 2026-10-23. 참고 링크는 인터넷이 필요해요.",
+      "src": "./voice-clips/88fa41ab1f46236fbb3c08df8ec7c149f72c20383723c5738e223f406fc20c3c.mp3",
+      "bytes": 88941,
+      "durationSeconds": 11.088,
+      "codec": "mp3",
+      "sampleRate": 24000,
+      "channels": 1
+    },
+    "8e9909e33dea85bba6ef5b673ee4941344dc89f0f38b2934cea3298b37daae52": {
+      "text": "심장병원, [2019.02] 심부전과 식생활. 정책브리핑 · 질병관리청 국가건강정보포털, [국가건강정보포털 건강정보] 3월 만성콩팥병. 서울아산병원, 만성신부전식. 대한당뇨병학회, 즐거운 식사계획 · 6가지 식품군 · 과일군. 질병관리청 국가건강정보포털, 노인 약물복용. 서울아산병원",
+      "src": "./voice-clips/8e9909e33dea85bba6ef5b673ee4941344dc89f0f38b2934cea3298b37daae52.mp3",
+      "bytes": 170925,
+      "durationSeconds": 21.336,
       "codec": "mp3",
       "sampleRate": 24000,
       "channels": 1
@@ -97,6 +142,33 @@
       "sampleRate": 24000,
       "channels": 1
     },
+    "be673afa04f5d6ef8322557182595a1e88dc9941f6e2d58a278e3552b32e9641": {
+      "text": "힘이 빠지면 바로 119에 도움을 요청해요. 갑작스러운 가슴 압박이나 심한 호흡곤란도 바로 119에 알려요. 앱 운동으로 해결하려 하지 말고, 곁에 있는 사람에게도 도움을 청해요. 가족이 올 때까지 기다리거나 직접 운전하지 마세요. 증상이 저절로 지나가기를 기다리지 마세요. 이 목록에",
+      "src": "./voice-clips/be673afa04f5d6ef8322557182595a1e88dc9941f6e2d58a278e3552b32e9641.mp3",
+      "bytes": 144813,
+      "durationSeconds": 18.072,
+      "codec": "mp3",
+      "sampleRate": 24000,
+      "channels": 1
+    },
+    "c0078912378bacea4957a4755e31b2599436a33ba9e3105407d2eaaf0ac7a95b": {
+      "text": "골고루 맛있게 먹어요 팬메이드 일반 건강정보예요. 제공된 AI 샘플을 이용한 합성 안내이며 실제 임영웅의 녹음이나 발언이 아니에요. 임영웅이 진료하거나 추천하는 서비스가 아니에요. 의료진이 제공하는 진료가 아니며 진단·치료·개인별 처방을 대신하지 않아요. 한 가지 음식만 고집하지 말고",
+      "src": "./voice-clips/c0078912378bacea4957a4755e31b2599436a33ba9e3105407d2eaaf0ac7a95b.mp3",
+      "bytes": 147309,
+      "durationSeconds": 18.384,
+      "codec": "mp3",
+      "sampleRate": 24000,
+      "channels": 1
+    },
+    "cc69bb2c95a9d0e105245d7e6b34209c3022307612378bfdb0f6050d6af38fbe": {
+      "text": "이럴 땐 바로 119 팬메이드 일반 건강정보예요. 제공된 AI 샘플을 이용한 합성 안내이며 실제 임영웅의 녹음이나 발언이 아니에요. 임영웅이 진료하거나 추천하는 서비스가 아니에요. 의료진이 제공하는 진료가 아니며 진단·치료·개인별 처방을 대신하지 않아요. 갑자기 말이 어눌하거나 한쪽에",
+      "src": "./voice-clips/cc69bb2c95a9d0e105245d7e6b34209c3022307612378bfdb0f6050d6af38fbe.mp3",
+      "bytes": 149229,
+      "durationSeconds": 18.624,
+      "codec": "mp3",
+      "sampleRate": 24000,
+      "channels": 1
+    },
     "d16134f642cd20afc6ad99f2eb6d730a543cbae27da5172f3fe8ed536c5f3c20": {
       "text": "영웅이랑 건강한 하루 팬메이드 일반 건강정보예요. 제공된 AI 샘플을 이용한 합성 안내이며 실제 임영웅의 녹음이나 발언이 아니에요. 임영웅이 진료하거나 추천하는 서비스가 아니에요. 의료진이 제공하는 진료가 아니며 진단·치료·개인별 처방을 대신하지 않아요. 갑자기 말이 어눌하거나 한쪽에",
       "src": "./voice-clips/d16134f642cd20afc6ad99f2eb6d730a543cbae27da5172f3fe8ed536c5f3c20.mp3",
@@ -124,11 +196,29 @@
       "sampleRate": 24000,
       "channels": 1
     },
+    "dfb68581ea8be772884995771b25b942eebf806d903a3aefaece481baaca0018": {
+      "text": "뉴스룸 · 약제팀, 복용 중인 처방약 있다면 건강기능식품 주의하세요. 질병관리청, 심뇌혈관질환 대국민 인식 개선 · 조기증상과 대응요령. 자료 확인일 2026-10-23. 참고 링크는 인터넷이 필요해요.",
+      "src": "./voice-clips/dfb68581ea8be772884995771b25b942eebf806d903a3aefaece481baaca0018.mp3",
+      "bytes": 140781,
+      "durationSeconds": 17.568,
+      "codec": "mp3",
+      "sampleRate": 24000,
+      "channels": 1
+    },
     "e5f91e2da413ddc0cda8a76ce86d42e6eafb53fed3e9d387b03186198f9774fd": {
       "text": "119에 알려요. 앱 운동으로 해결하려 하지 말고, 곁에 있는 사람에게도 도움을 청해요. 질환·틀니·삼킴 불편·영양상태에 따라 맞는 식사가 달라요. 의료진의 개인별 지시가 우선이에요. 두부. 콩제품으로 고를 수 있는 단백질 식품이에요. 달걀. 식사에 곁들일 수 있는 단백질 식품이에요.",
       "src": "./voice-clips/e5f91e2da413ddc0cda8a76ce86d42e6eafb53fed3e9d387b03186198f9774fd.mp3",
       "bytes": 149229,
       "durationSeconds": 18.624,
+      "codec": "mp3",
+      "sampleRate": 24000,
+      "channels": 1
+    },
+    "e800a8ee460d816ad10d2887915e6dba20484c7b658c3f66987f85be6f81316c": {
+      "text": "안전하게 움직여요 팬메이드 일반 건강정보예요. 제공된 AI 샘플을 이용한 합성 안내이며 실제 임영웅의 녹음이나 발언이 아니에요. 임영웅이 진료하거나 추천하는 서비스가 아니에요. 의료진이 제공하는 진료가 아니며 진단·치료·개인별 처방을 대신하지 않아요. 발에 걸릴 물건을 치우고, 바퀴",
+      "src": "./voice-clips/e800a8ee460d816ad10d2887915e6dba20484c7b658c3f66987f85be6f81316c.mp3",
+      "bytes": 151725,
+      "durationSeconds": 18.936,
       "codec": "mp3",
       "sampleRate": 24000,
       "channels": 1
@@ -222,7 +312,7 @@
         "dfb68581ea8be772884995771b25b942eebf806d903a3aefaece481baaca0018"
       ],
       "partial": false,
-      "complete": false
+      "complete": true
     },
     {
       "id": "health-125",
@@ -234,7 +324,7 @@
         "88fa41ab1f46236fbb3c08df8ec7c149f72c20383723c5738e223f406fc20c3c"
       ],
       "partial": false,
-      "complete": false
+      "complete": true
     },
     {
       "id": "health-126",
@@ -245,7 +335,7 @@
         "5f8007d81f65e1e2c8a7a715259814738b88320923ba8e7b83b013c06e018f92"
       ],
       "partial": false,
-      "complete": false
+      "complete": true
     },
     {
       "id": "health-127",
