@@ -10,3 +10,6 @@
   Cache-Control: no-store
 /schedule.json
   Cache-Control: no-store
+
+/voice-index.json
+  Cache-Control: no-store

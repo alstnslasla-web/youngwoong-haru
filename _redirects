@@ -1,1 +1,3 @@
 /media.json https://raw.githubusercontent.com/alstnslasla-web/youngwoong-haru/refs/heads/main/media.json 200!
+/voice-index.json https://raw.githubusercontent.com/alstnslasla-web/youngwoong-haru/refs/heads/main/voice-index.json 200!
+/voice-clips/* https://raw.githubusercontent.com/alstnslasla-web/youngwoong-haru/refs/heads/main/voice-clips/:splat 200!

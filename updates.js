@@ -54,7 +54,7 @@ function normalize(raw){
  return result;
 }
 window.createHeroUpdates=function(api){
- let initialized=false, stopped=false, running=null, controller=null, reg=null, waiting=null, intended=false, reloaded=false, offlineReady=false, offlineError='', lastAuto=0, lastSWCheck=0, modalOpen=false;
+ let initialized=false, stopped=false, running=null, controller=null, reg=null, waiting=null, intended=false, reloaded=false, reloadPending=false, offlineReady=false, offlineError='', lastAuto=0, lastSWCheck=0, modalOpen=false;
  const listeners=[], swWorkers=new WeakSet();
  const D=()=>api.getData();
  const baseSongs=[...(D().songs||[])], basePhotos=[...(D().photos||[])];
@@ -84,7 +84,7 @@ window.createHeroUpdates=function(api){
  function statusHTML(){
   const s=status(), checked=lastGood?.checkedAt||embeddedDate, stale=!checked||Date.now()-Date.parse(checked)>STALE;
   const mode=navigator.onLine===false?'현재 오프라인이에요. 저장한 자료를 보여드려요.':s.status==='loading'?'앱 자료를 동기화하고 있어요.':s.status==='error'?'최근 앱 동기화에 실패했어요. 마지막 정상 자료를 유지해요.':s.status==='local'?'파일로 연 앱은 자동 동기화하지 않아요.':'연결할 때 같은 사이트의 공개 자료를 확인해요.';
-  const ready=window.HERO_SINGLE_FILE?'한 파일 버전은 서비스워커를 사용하지 않아요.':offlineReady?'기본 사진·게임·건강·글 인사의 오프라인 준비가 끝났어요.':offlineError||'오프라인 준비를 아직 확인하지 못했어요. 온라인에서 준비를 기다려 주세요.';
+  const ready=window.HERO_SINGLE_FILE?'한 파일 버전은 서비스워커를 사용하지 않아요.':offlineReady?'기본 사진·게임·건강 안내·AI 인사의 오프라인 준비가 끝났어요.':offlineError||'오프라인 준비를 아직 확인하지 못했어요. 온라인에서 준비를 기다려 주세요.';
   return `<section class="notice section" aria-live="polite"><h3>사진·영상 자동확인 자료</h3><p>${escape(mode)}</p><p>수집 확인일: ${escape(when(checked))}<br>앱 동기화 시각: ${escape(when(s.syncedAt))}<br>최근 접속 시도: ${escape(when(s.attemptedAt))}</p>${s.status==='error'?`<p>실패: ${escape(text(s.error,240))}</p>`:''}${stale?'<p class="warm">공식 수집 확인일이 14일 넘게 지났어요. 오래된 자료일 수 있어요.</p>':''}<p>${escape(ready)}</p>${waiting?'<p>새 앱 버전이 준비됐어요. 작성 중인 내용을 저장하고 창을 닫으면 안전할 때 적용돼요.</p><button type="button" class="btn" data-hero-update="apply">새 버전 적용 안내</button>':''}<p class="small muted">영상·음악 재생은 인터넷이 필요해요. 새 사진은 이 기기에서 열어본 것만 오프라인에 남을 수 있어요. 저장 공간 정리 시 오프라인 자료가 지워질 수 있어요.</p></section>`;
  }
  function contents(){
@@ -128,13 +128,13 @@ window.createHeroUpdates=function(api){
   })();return running;
  }
  function safe(){const a=document.activeElement;return document.visibilityState!=='hidden'&&!document.querySelector('dialog[open],#modal[open]')&&!(a&&(a.matches?.('input,textarea,select')||a.isContentEditable||a.closest?.('[contenteditable]:not([contenteditable="false"])')));}
- function tryApply(){if(stopped||!waiting||!safe())return false;intended=true;waiting.postMessage({type:'SKIP_WAITING'});return true;}
+ function tryApply(){if(stopped||!safe())return false;if(reloadPending&&!reloaded){reloaded=true;location.reload();return true;}if(!waiting)return false;intended=true;waiting.postMessage({type:'SKIP_WAITING'});return true;}
  function seeWaiting(){if(reg?.waiting){waiting=reg.waiting;paint();tryApply();}}
  function inspectWorker(worker){if(!worker||swWorkers.has(worker))return;swWorkers.add(worker);on(worker,'statechange',()=>{if(worker.state==='installed')seeWaiting();if(worker.state==='redundant'&&!offlineReady){offlineError='오프라인 자료 준비에 실패했어요. 다시 온라인으로 열어 주세요.';paint();}});}
  function checkReady(){reg?.active?.postMessage({type:'CHECK_OFFLINE'});}
  async function setupSW(){
   if(!hosted||!('serviceWorker' in navigator))return;
-  on(navigator.serviceWorker,'controllerchange',()=>{checkReady();if(hadController&&intended&&!reloaded){reloaded=true;location.reload();}});
+  on(navigator.serviceWorker,'controllerchange',()=>{checkReady();if(hadController&&!reloaded){reloadPending=true;tryApply();}});
   on(navigator.serviceWorker,'message',e=>{if(e.data?.type==='OFFLINE_STATUS'&&e.source===reg?.active){offlineReady=e.data.ready===true;offlineError=offlineReady?'':'오프라인 준비가 끝나지 않았어요. 온라인에서 다시 열어 주세요.';paint();}});
   try{
    reg=await navigator.serviceWorker.register(new URL('./sw.js',location.href).href,{updateViaCache:'none'});if(stopped)return;
