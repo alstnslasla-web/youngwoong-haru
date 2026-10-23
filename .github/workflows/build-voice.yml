@@ -20,13 +20,16 @@ jobs:
       contents: write
     env:
       VOICE_BUDGET_SECONDS: '1080'
-      VOICE_REPORT_PATH: ${{ runner.temp }}/voice-build-status.json
-      VOICE_CLIENT_DIR: ${{ runner.temp }}/voice-client
-      HF_HOME: ${{ runner.temp }}/qwen-model-cache
       GRADIO_TEMP_DIR: /tmp/gradio
       GRADIO_ANALYTICS_ENABLED: 'False'
       HF_HUB_DISABLE_TELEMETRY: '1'
     steps:
+      - name: Configure private build paths
+        shell: bash
+        run: |
+          echo "VOICE_REPORT_PATH=$RUNNER_TEMP/voice-build-status.json" >> "$GITHUB_ENV"
+          echo "VOICE_CLIENT_DIR=$RUNNER_TEMP/voice-client" >> "$GITHUB_ENV"
+          echo "HF_HOME=$RUNNER_TEMP/qwen-model-cache" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
