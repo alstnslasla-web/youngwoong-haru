@@ -1,0 +1,113 @@
+name: Build FREE CPU public voice assets
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/build-voice.mjs
+      - .github/workflows/build-voice.yml
+      - voice-catalog.json
+# No schedule until actual CPU proof. No paid/GPU runner, secrets or external inference.
+permissions:
+  contents: read
+concurrency:
+  group: voice-assets-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    env:
+      VOICE_BUDGET_SECONDS: '1080'
+      VOICE_REPORT_PATH: ${{ runner.temp }}/voice-build-status.json
+      VOICE_CLIENT_DIR: ${{ runner.temp }}/voice-client
+      HF_HOME: ${{ runner.temp }}/qwen-model-cache
+      GRADIO_TEMP_DIR: /tmp/gradio
+      GRADIO_ANALYTICS_ENABLED: 'False'
+      HF_HUB_DISABLE_TELEMETRY: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run dependency-free validation tests
+        run: node scripts/build-voice.mjs --self-test
+      - name: Install official CPU vendor CLI and Node client
+        timeout-minutes: 9
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check torch torchaudio --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --disable-pip-version-check 'qwen-tts @ git+https://github.com/QwenLM/Qwen3-TTS.git@022e286b98fbec7e1e916cb940cdf532cd9f488e'
+          npm install --prefix "$VOICE_CLIENT_DIR" --no-audit --no-fund --ignore-scripts @gradio/client@1.19.0
+          if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y --no-install-recommends ffmpeg
+          fi
+      - name: Build assets using local official vendor CPU demo
+        id: compile
+        run: node scripts/build-voice.mjs
+      - name: Commit only validated public audio outputs
+        timeout-minutes: 2
+        if: always() && steps.compile.outcome != 'skipped'
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module - <<'NODE'
+          import fs from 'node:fs';
+          import { execFileSync } from 'node:child_process';
+          const p = process.env.VOICE_REPORT_PATH;
+          if (!fs.existsSync(p) || !JSON.parse(fs.readFileSync(p, 'utf8')).success) process.exit(1);
+          const index = JSON.parse(fs.readFileSync('voice-index.json', 'utf8'));
+          const files = Object.entries(index.clips).map(([hash, row]) => {
+            if (!/^[a-f0-9]{64}$/.test(hash) || row.src !== './voice-clips/' + hash + '.mp3') throw Error('Unsafe clip path');
+            const file = row.src.slice(2), stat = fs.lstatSync(file);
+            if (!stat.isFile() || stat.isSymbolicLink() || stat.size !== row.bytes) throw Error('Changed clip');
+            return file;
+          });
+          for (let i = 0; i < files.length; i += 128) execFileSync('git', ['add', '--', ...files.slice(i, i + 128)]);
+          NODE
+          # Explicit validated index allowlist. Never git add ., unrelated MP3s,
+          # model/cache/prompt/.pt/reference/input files.
+          for file in voice-index.json voice-day.wav; do
+            if test -f "$file"; then git add -- "$file"; fi
+          done
+          if git diff --cached --quiet; then echo 'No public asset changes.'; exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Build validated public voice assets on CPU'
+          case "$GITHUB_REF" in
+            refs/heads/*) branch="${GITHUB_REF#refs/heads/}" ;;
+            *) echo 'Asset commits require a branch, not a tag.'; exit 1 ;;
+          esac
+          # Rebase only nonoverlapping concurrent changes. Never force-push or resolve
+          # audio conflicts automatically. Retry a bounded race with other commits.
+          for attempt in 1 2 3; do
+            if ! git pull --rebase origin "$branch"; then
+              git rebase --abort || true
+              echo 'Rebase conflict: public assets were not pushed.'
+              exit 1
+            fi
+            if git push origin "HEAD:refs/heads/$branch"; then exit 0; fi
+            sleep "$attempt"
+          done
+          echo 'Push still rejected after three safe rebase attempts.'
+          exit 1
+      - name: Report missing build status
+        if: always()
+        shell: bash
+        run: |
+          if ! test -f "$VOICE_REPORT_PATH"; then
+            echo '## FREE CPU voice asset proof' >> "$GITHUB_STEP_SUMMARY"
+            echo 'FAILED: setup or execution ended before a status report. No CPU success or listening quality is claimed.' >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+# No custom Python scripts, prompt/model publishing, runtime artifacts or deployments.
+# Standard hosted public-repo CPU minutes ordinarily have no charge; quotas still apply.
+# Actual model startup, inference speed, memory fit and listening quality are unproven.
