@@ -190,6 +190,19 @@ async function plan() {
   else entries.push({ id: 'guide', text: GUIDE_TEXT });
   return entries.map(e => { const split = cutText(e.text); return { ...e, partial: split.partial, texts: split.chunks, chunks: split.chunks.map(sha) }; });
 }
+function budgetMilliseconds(value) {
+  const seconds = Number(value);
+  return Math.min(7200, Math.max(60, Number.isFinite(seconds) && seconds ? seconds : 1080)) * 1000;
+}
+function checkpointProgress(report, start, now = Date.now()) {
+  return { event: 'voice_checkpoint', produced: report.produced, reused: report.reused, planned: report.plannedChunks, elapsedSeconds: +((now - start) / 1000).toFixed(2) };
+}
+function buildOutcome(report, indexWritten, hasPartialText) {
+  const completePlan = report.plannedChunks > 0 && report.available === report.plannedChunks && !hasPartialText;
+  const progressMade = report.produced > 0;
+  const success = indexWritten && report.available > 0 && (progressMade || completePlan);
+  return { success, state: !success ? 'failed' : completePlan ? 'complete' : 'partial', completePlan, progressMade, remainingChunks: Math.max(0, report.plannedChunks - report.available) };
+}
 async function selfTest() {
   const make = silent => {
     const b = Buffer.alloc(44 + 16000); b.write('RIFF'); b.writeUInt32LE(b.length - 8, 4); b.write('WAVEfmt ', 8); b.writeUInt32LE(16, 16); b.writeUInt16LE(1, 20); b.writeUInt16LE(1, 22); b.writeUInt32LE(8000, 24); b.writeUInt32LE(16000, 28); b.writeUInt16LE(2, 32); b.writeUInt16LE(16, 34); b.write('data', 36); b.writeUInt32LE(16000, 40);
@@ -232,10 +245,26 @@ async function selfTest() {
   assert.equal(successfulResult([null, 'Finished. (生成完成)']), false);
   assert.equal(successfulResult([{}, 'Success']), false);
   assert.equal(successfulResult([{}, 'RuntimeError: failed']), false);
-  console.log(JSON.stringify({ selfTest: true, success: true, checks: 46 }));
+  for (const [value, expected] of [[undefined, 1080], ['', 1080], ['invalid', 1080], ['Infinity', 1080], [0, 1080], [1080, 1080], ['7200', 7200], [99999, 7200], [-1, 60]]) assert.equal(budgetMilliseconds(value), expected * 1000);
+  const stalled = buildOutcome({ produced: 0, available: 14, plannedChunks: 187 }, true, false);
+  assert.equal(stalled.success, false);
+  assert.equal(stalled.state, 'failed');
+  assert.equal(stalled.remainingChunks, 173);
+  assert.equal(stalled.progressMade, false);
+  const reusedComplete = buildOutcome({ produced: 0, available: 187, plannedChunks: 187 }, true, false);
+  assert.equal(reusedComplete.success, true);
+  assert.equal(reusedComplete.state, 'complete');
+  assert.equal(reusedComplete.completePlan, true);
+  assert.equal(buildOutcome({ produced: 0, available: 187, plannedChunks: 187 }, true, true).success, false);
+  assert.equal(buildOutcome({ produced: 1, available: 15, plannedChunks: 187 }, true, false).state, 'partial');
+  assert.equal(buildOutcome({ produced: 1, available: 1, plannedChunks: 187 }, false, false).success, false);
+  assert.equal(buildOutcome({ produced: 0, available: 0, plannedChunks: 187 }, true, false).success, false);
+  const progress = checkpointProgress({ produced: 1, reused: 14, plannedChunks: 187 }, 1000, 42400);
+  assert.equal(JSON.stringify(progress), '{"event":"voice_checkpoint","produced":1,"reused":14,"planned":187,"elapsedSeconds":41.4}');
+  console.log(JSON.stringify({ selfTest: true, success: true, checks: 67 }));
 }
 async function main() {
-  const start = Date.now(), budget = Math.min(1080, Math.max(60, Number(process.env.VOICE_BUDGET_SECONDS) || 1080)) * 1000;
+  const start = Date.now(), budget = budgetMilliseconds(process.env.VOICE_BUDGET_SECONDS);
   const end = start + budget - 20000; // checkpoint/cleanup reserve
   const report = { version: 1, success: false, state: 'starting', model: MODEL, vendorCommit: COMMIT, device: 'cpu', dtype: 'float32', budgetSeconds: budget / 1000, produced: 0, reused: 0, retained: 0, plannedChunks: 0, firstClip: null, errors: [], listeningQuality: 'not assessed' };
   const clips = Object.create(null); let entries = [], server, client, temp, indexWritten = false, source, priorEntries = [];
@@ -246,6 +275,8 @@ async function main() {
     const sorted = Object.fromEntries(Object.keys(clips).sort().map(k => [k, clips[k]]));
     await atomic(path.join(ROOT, 'voice-index.json'), JSON.stringify({ version: 1, hashAlgorithm: 'SHA-256', model: MODEL, vendorCommit: COMMIT, referenceSha256: source.referenceSha256, source, clips: sorted, entries: [...priorEntries.filter(old => !entries.some(current => current.id === old.id)), ...entries].map(({ id, text, chunks, partial }) => ({ id, text, chunks, partial, complete: chunks.every(k => !!clips[k]) })) }, null, 2) + '\n');
     indexWritten = true;
+    // Fixed, numeric-only checkpoint log: no text, paths, URLs or vendor output.
+    console.log(JSON.stringify(checkpointProgress(report, start)));
   }
   const hardStop = setTimeout(() => { report.errors.push('job_budget_expired'); terminate(server, 'SIGKILL'); }, budget - 10000);
   try {
@@ -326,8 +357,9 @@ async function main() {
       const first = entries.flatMap(e => e.chunks).find(hash => !!clips[hash]);
       report.firstClip = { hash: first, reused: true, mp3: clips[first], timing: 'not measured on this run' };
     }
-    report.success = report.available > 0 && indexWritten; report.elapsedSeconds = +((Date.now() - start) / 1000).toFixed(2);
-    report.state = !report.success ? 'failed' : report.available === report.plannedChunks && !entries.some(e => e.partial) ? 'complete' : 'partial';
+    Object.assign(report, buildOutcome(report, indexWritten, entries.some(e => e.partial)));
+    if (!report.progressMade && !report.completePlan && report.plannedChunks > 0) report.errors.push('no_new_clips_incomplete_plan');
+    report.elapsedSeconds = +((Date.now() - start) / 1000).toFixed(2);
     const json = JSON.stringify(report, null, 2);
     if (process.env.VOICE_REPORT_PATH) await fs.writeFile(process.env.VOICE_REPORT_PATH, json + '\n');
     if (process.env.GITHUB_STEP_SUMMARY) await fs.appendFile(process.env.GITHUB_STEP_SUMMARY, '## FREE CPU voice asset proof\n\nOfficial vendor CLI, local-only Gradio inference. No listening-quality claim.\n\n~~~json\n' + json + '\n~~~\n');
