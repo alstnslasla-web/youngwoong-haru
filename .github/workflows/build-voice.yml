@@ -6,7 +6,7 @@ on:
       - scripts/build-voice.mjs
       - .github/workflows/build-voice.yml
       - voice-catalog.json
-# No schedule until actual CPU proof. No paid/GPU runner, secrets or external inference.
+# No recurring schedule. No paid/GPU runner, secrets or external inference.
 permissions:
   contents: read
 concurrency:
@@ -14,6 +14,12 @@ concurrency:
   cancel-in-progress: false
 jobs:
   build:
+    name: Build batch ${{ matrix.batch }} of 3
+    strategy:
+      max-parallel: 1
+      fail-fast: false
+      matrix:
+        batch: [1, 2, 3]
     runs-on: ubuntu-latest
     timeout-minutes: 135
     permissions:
