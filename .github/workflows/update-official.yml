@@ -1,0 +1,54 @@
+name: Update official public media
+on:
+  schedule:
+    - cron: '0 0 * * *' # 09:00 Asia/Seoul; GitHub may delay jobs.
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/update-official.mjs
+      - .github/workflows/update-official.yml
+permissions:
+  contents: write
+concurrency:
+  group: official-media-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check official public sources
+        run: node scripts/update-official.mjs | tee "$RUNNER_TEMP/official-check.json"
+      - name: Commit media metadata only
+        shell: bash
+        run: |
+          git add -- media.json
+          if git diff --cached --quiet; then
+            echo 'No media changes.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Update official public media metadata'
+          git push
+      - name: Report verification status
+        if: always()
+        shell: bash
+        run: |
+          node --input-type=module - <<'NODE'
+          import fs from 'node:fs';
+          const p=process.env.RUNNER_TEMP+'/official-check.json';
+          if(!fs.existsSync(p)){console.error('No source check result.');process.exit(1);}
+          const lines=fs.readFileSync(p,'utf8').trim().split('\n');
+          const r=JSON.parse(lines[lines.length-1]);
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,'## Official source verification\n\n'+JSON.stringify(r,null,2)+'\n');
+          if(!r.success)process.exit(1);
+          NODE
+# No npm, paid APIs, deployment hooks, Netlify steps or private cafe access.
+# Public-repo schedules can be disabled after 60 days without activity.
