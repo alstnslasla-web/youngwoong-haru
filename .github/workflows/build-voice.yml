@@ -10,16 +10,16 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: voice-assets-${{ github.ref }}
+  group: voice-assets-refs/heads/main
   cancel-in-progress: false
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 135
     permissions:
       contents: write
     env:
-      VOICE_BUDGET_SECONDS: '1080'
+      VOICE_BUDGET_SECONDS: '7200'
       GRADIO_TEMP_DIR: /tmp/gradio
       GRADIO_ANALYTICS_ENABLED: 'False'
       HF_HUB_DISABLE_TELEMETRY: '1'
@@ -32,6 +32,8 @@ jobs:
           echo "HF_HOME=$RUNNER_TEMP/qwen-model-cache" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
         with:
+          # Resolve latest generated commits when a queued run actually starts.
+          ref: main
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
@@ -85,10 +87,8 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git commit -m 'Build validated public voice assets on CPU'
-          case "$GITHUB_REF" in
-            refs/heads/*) branch="${GITHUB_REF#refs/heads/}" ;;
-            *) echo 'Asset commits require a branch, not a tag.'; exit 1 ;;
-          esac
+          # Match checkout ref, including manual dispatches from another branch.
+          branch='main'
           # Rebase only nonoverlapping concurrent changes. Never force-push or resolve
           # audio conflicts automatically. Retry a bounded race with other commits.
           for attempt in 1 2 3; do
@@ -113,4 +113,4 @@ jobs:
           fi
 # No custom Python scripts, prompt/model publishing, runtime artifacts or deployments.
 # Standard hosted public-repo CPU minutes ordinarily have no charge; quotas still apply.
-# Actual model startup, inference speed, memory fit and listening quality are unproven.
+# Variable CPU performance and batch completion are not guaranteed; no quality claim.
