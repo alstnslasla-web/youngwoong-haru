@@ -1,0 +1,26 @@
+{
+  "id": "./",
+  "name": "영웅이랑 매일 · 다정한 하루",
+  "short_name": "영웅이랑",
+  "description": "걷기, 의자 스트레칭, 건강 길잡이, 안부 인사와 팬 놀이. 비공식 가족용 팬 앱.",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f5f0",
+  "theme_color": "#146da4",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "updatedAt": "2026-10-23",
+  "sourceName": "가족이 관리하는 일정표 · 최초 자료는 보도 참고",
+  "events": [
+    {
+      "id": "news-20261024",
+      "date": "2026-10-24",
+      "endDate": "2026-10-25",
+      "title": "영웅시대 방 자랑 대회 접수",
+      "time": "",
+      "place": "공식 팬카페",
+      "category": "보도 참고",
+      "note": "10월 25일 23:59까지. 공식 공지를 인용한 보도 기준이며 회원 전용 원문 재확인이 필요해요.",
+      "url": "https://www.topstarnews.net/news/articleView.html?idxno=16252328",
+      "updatedAt": "2026-10-23"
+    },
+    {
+      "id": "news-20261030",
+      "date": "2026-10-30",
+      "title": "방 자랑 대회 유튜브 라이브",
+      "time": "17:00",
+      "place": "유튜브",
+      "category": "보도 참고",
+      "note": "공식 공지 인용 보도 기준. 시간·진행 여부는 공식 공지에서 다시 확인해 주세요.",
+      "url": "https://www.topstarnews.net/news/articleView.html?idxno=16252328",
+      "updatedAt": "2026-10-23"
+    }
+  ]
+}
