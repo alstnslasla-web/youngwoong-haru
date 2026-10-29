@@ -745,6 +745,15 @@
       "sampleRate": 24000,
       "channels": 1
     },
+    "6e34bc507de27d7961b17a718c189c094a40f8eaec3251a899bd8dacfd00288d": {
+      "text": "은자님 전용 설정이에요. 글자 크기와 화면 대비를 편하게 바꿀 수 있어요. 개인 기록은 읽지 않아요.",
+      "src": "./voice-clips/6e34bc507de27d7961b17a718c189c094a40f8eaec3251a899bd8dacfd00288d.mp3",
+      "bytes": 63981,
+      "durationSeconds": 7.968,
+      "codec": "mp3",
+      "sampleRate": 24000,
+      "channels": 1
+    },
     "6e8d663fd2282dc142b0ab4374b639f33eae268c65e9b4b03b05cef3a74dfe03": {
       "text": "임영웅의 IM HERO 2가 발매된 해는? 보기. 2025년. 2021년. 2023년",
       "src": "./voice-clips/6e8d663fd2282dc142b0ab4374b639f33eae268c65e9b4b03b05cef3a74dfe03.mp3",
@@ -2008,9 +2017,9 @@
     },
     {
       "id": "guide-4",
-      "text": "이름, 글자 크기와 화면 대비를 바꾸는 설정이에요. 개인 이름과 저장 기록은 읽지 않아요.",
+      "text": "은자님 전용 설정이에요. 글자 크기와 화면 대비를 편하게 바꿀 수 있어요. 개인 기록은 읽지 않아요.",
       "chunks": [
-        "8562806814e8fbfe7e5f9f9d8298683dd14fa9bb3c15a12c4d52383a19dc8e4e"
+        "6e34bc507de27d7961b17a718c189c094a40f8eaec3251a899bd8dacfd00288d"
       ],
       "partial": false,
       "complete": true
