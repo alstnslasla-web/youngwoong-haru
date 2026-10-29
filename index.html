@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#146da4">
 <meta name="description" content="영웅이랑 하루 보내기. 큰 글씨, 걷기 목표, 의자 스트레칭, 건강 상식, AI 음성 인사와 팬 놀이. 비공식 팬메이드 앱.">
 <meta name="robots" content="noindex,nofollow">
-<meta property="og:title" content="영웅이랑 매일 · 어머님의 다정한 하루">
+<meta property="og:title" content="영웅이랑 매일 · 은자님의 다정한 하루">
 <meta property="og:description" content="걷기·스트레칭·건강상식·AI 음성 인사·노래와 놀이를 큰 글씨로. 한 번 저장하면 기본 기능은 오프라인에서도 돼요.">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -14,18 +14,18 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="./icon-192.png">
-<title>영웅이랑 매일 · 엄마의 작은 팬 놀이터</title>
+<title>영웅이랑 매일 · 은자님의 작은 팬 놀이터</title>
 <link rel="stylesheet" href="./app.css">
 </head>
 <body>
 <a class="skip" href="#main">본문으로 바로 가기</a>
-<div id="offline" class="offline" role="status">인터넷이 쉬고 있어요. 사진과 놀이는 계속 즐길 수 있어요.</div>
-<header class="topbar"><div class="wrap topbar-inner"><button class="brand" data-go="home" aria-label="영웅이랑 매일, 첫 화면"><span class="brand-mark" id="brand-icon"></span><span><b>영웅이랑 매일</b><small>우리 엄마의 작은 영웅시대</small></span></button><div class="top-actions"><button class="btn" id="font-toggle" aria-label="글자 크기 바꾸기">가<span>글자 크게</span></button><button class="btn" id="settings-open" aria-label="설정 열기"><span id="settings-icon"></span><span class="settings-label">설정</span></button></div></div></header>
+<div id="offline" class="offline" role="status">인터넷이 쉬고 있어요. 저장된 자료와 기본 놀이는 계속 이용할 수 있어요.</div>
+<header class="topbar"><div class="wrap topbar-inner"><button class="brand" data-go="home" aria-label="영웅이랑 매일, 첫 화면"><span class="brand-mark" id="brand-icon"></span><span><b>영웅이랑 매일</b><small>은자님의 작은 영웅시대</small></span></button><div class="top-actions"><button class="btn" id="font-toggle" aria-label="글자 크기 바꾸기">가<span>글자 크게</span></button><button class="btn" id="settings-open" aria-label="설정 열기"><span id="settings-icon"></span><span class="settings-label">설정</span></button></div></div></header>
 <div class="nav-shell"><div class="wrap"><nav class="nav" id="nav" aria-label="주 메뉴"></nav></div></div>
 
 <section class="wrap" aria-label="AI 음성 안내"><div class="voice-toolbar"><button class="btn primary" style="min-height:54px;font-size:1rem" data-action="read-screen">화면 안내 듣기</button><button class="btn" style="min-height:54px;font-size:1rem" data-action="voice-stop">말 멈추기</button></div><p class="small muted">공개 안내 읽기 · 개인 기록 제외 · 제공된 AI 샘플 합성 음성으로 실제 임영웅의 녹음이나 발언이 아니에요.</p><button class="text-link" data-action="voice-open">AI 음성 안내와 연결 상태</button><div class="small muted" data-voice-status role="status"></div></section>
 <main id="main" class="wrap" tabindex="-1"></main>
-<footer class="footer"><b>좋아하는 마음으로, 오늘도 천천히.</b><p>가족을 위한 비공식 팬 놀이터 · 임영웅 또는 소속사의 공식 서비스가 아닙니다.</p><p>기본 자료 확인 2026.10.23 · 건강정보는 일반 안내이며 진료가 아니에요.<br>시간대별 AI 인사는 버튼으로 들어요. 실제 임영웅님의 녹음·발언·대화가 아니에요.</p><button class="text-link" data-action="sources">자료 출처와 이용 안내</button></footer>
+<footer class="footer"><b>좋아하는 마음으로, 오늘도 천천히.</b><p>은자님을 위한 비공식 팬 놀이터 · 임영웅 또는 소속사의 공식 서비스가 아닙니다.</p><p>기본 자료 확인 2026.10.23 · 건강정보는 일반 안내이며 진료가 아니에요.<br>시간대별 AI 인사는 버튼으로 들어요. 실제 임영웅님의 녹음·발언·대화가 아니에요.</p><button class="text-link" data-action="sources">자료 출처와 이용 안내</button></footer>
 <dialog id="modal" aria-labelledby="modal-title"><div class="modal-head"><h2 id="modal-title"></h2><button class="btn close-btn" id="modal-close">닫기</button></div><div class="modal-readbar"><button class="btn primary" style="min-height:54px;font-size:1rem" data-action="read-screen">화면 안내 듣기</button><button class="btn" style="min-height:54px;font-size:1rem" data-action="voice-stop">말 멈추기</button></div><p class="small muted" style="padding:0 24px">안내 읽기 · 개인 기록 제외 · 실제 가수의 녹음이나 발언이 아닌 AI 합성 안내</p><div class="small muted" style="padding:0 24px" data-voice-status role="status"></div><div class="modal-body" id="modal-body"></div></dialog>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <script src="./data.js"></script>

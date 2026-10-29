@@ -10,3 +10,6 @@
 .voice-toolbar{display:flex;gap:12px;margin-top:16px}.voice-toolbar .btn{flex:1;min-width:0;justify-content:center}.voice-toolbar+main{padding-top:18px}@media(max-width:500px){.voice-toolbar{gap:8px}.voice-toolbar .btn{padding:12px 6px;font-size:.88rem}}
 
 .modal-readbar{display:flex;gap:10px;padding:12px 24px;border-bottom:1px solid var(--line,#ccdbe4)}.modal-readbar .btn{flex:1;min-width:0;font-size:.9rem;justify-content:center}@media(max-width:500px){.modal-readbar{padding:10px 14px;gap:8px}.modal-readbar .btn{padding:10px 5px}}
+
+/* Keep form controls within the dialog at the largest text size. */
+.stack{grid-template-columns:minmax(0,1fr)}.stack>*,label{min-width:0}input:not([type="checkbox"]):not([type="radio"]),textarea,select{min-width:0}

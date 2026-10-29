@@ -1,7 +1,7 @@
-/* Official metadata synchronization and safe PWA updates. No background polling. */
+/* Official metadata synchronization and safe PWA updates. Foreground-only update checks; no hidden/closed-app polling. */
 (() => {
 'use strict';
-const CHANNEL='UC3WZlO2Zl8NE1yIUgtwUtQw', LIMIT=1500000, INTERVAL=15*60*1000, STALE=14*86400000;
+const CHANNEL='UC3WZlO2Zl8NE1yIUgtwUtQw', LIMIT=1500000, INTERVAL=15*60*1000, SW_INTERVAL=60*1000, STALE=14*86400000;
 const PHOTO_HOSTS=new Set(['mulgogimusic.com','www.mulgogimusic.com']);
 const own=(o,k)=>Object.prototype.hasOwnProperty.call(o,k);
 const object=x=>x&&typeof x==='object'&&!Array.isArray(x);
@@ -54,13 +54,13 @@ function normalize(raw){
  return result;
 }
 window.createHeroUpdates=function(api){
- let initialized=false, stopped=false, running=null, controller=null, reg=null, waiting=null, intended=false, reloaded=false, reloadPending=false, offlineReady=false, offlineError='', lastAuto=0, lastSWCheck=0, modalOpen=false;
+ let initialized=false, stopped=false, running=null, controller=null, reg=null, waiting=null, intended=false, reloaded=false, reloadPending=false, offlineReady=false, offlineError='', lastAuto=0, lastSWCheck=0, modalOpen=false, swTimer=null, swUpdating=false, swSetup=false, swBound=false;
  const listeners=[], swWorkers=new WeakSet();
  const D=()=>api.getData();
  const baseSongs=[...(D().songs||[])], basePhotos=[...(D().photos||[])];
  const embeddedDate=date(D().checkedAt);
  let lastGood=null;
- const hadController=!!navigator.serviceWorker?.controller;
+ let hadController=!!navigator.serviceWorker?.controller;
  const hosted=/^https?:$/.test(location.protocol)&&!window.HERO_SINGLE_FILE;
  const state=()=>api.getState();
  const save=()=>{try{return api.save();}catch{return false;}};
@@ -84,12 +84,12 @@ window.createHeroUpdates=function(api){
  function statusHTML(){
   const s=status(), checked=lastGood?.checkedAt||embeddedDate, stale=!checked||Date.now()-Date.parse(checked)>STALE;
   const mode=navigator.onLine===false?'현재 오프라인이에요. 저장한 자료를 보여드려요.':s.status==='loading'?'앱 자료를 동기화하고 있어요.':s.status==='error'?'최근 앱 동기화에 실패했어요. 마지막 정상 자료를 유지해요.':s.status==='local'?'파일로 연 앱은 자동 동기화하지 않아요.':'연결할 때 같은 사이트의 공개 자료를 확인해요.';
-  const ready=window.HERO_SINGLE_FILE?'한 파일 버전은 서비스워커를 사용하지 않아요.':offlineReady?'기본 사진·게임·건강 안내·AI 인사의 오프라인 준비가 끝났어요.':offlineError||'오프라인 준비를 아직 확인하지 못했어요. 온라인에서 준비를 기다려 주세요.';
-  return `<section class="notice section" aria-live="polite"><h3>사진·영상 자동확인 자료</h3><p>${escape(mode)}</p><p>수집 확인일: ${escape(when(checked))}<br>앱 동기화 시각: ${escape(when(s.syncedAt))}<br>최근 접속 시도: ${escape(when(s.attemptedAt))}</p>${s.status==='error'?`<p>실패: ${escape(text(s.error,240))}</p>`:''}${stale?'<p class="warm">공식 수집 확인일이 14일 넘게 지났어요. 오래된 자료일 수 있어요.</p>':''}<p>${escape(ready)}</p>${waiting?'<p>새 앱 버전이 준비됐어요. 작성 중인 내용을 저장하고 창을 닫으면 안전할 때 적용돼요.</p><button type="button" class="btn" data-hero-update="apply">새 버전 적용 안내</button>':''}<p class="small muted">영상·음악 재생은 인터넷이 필요해요. 새 사진은 이 기기에서 열어본 것만 오프라인에 남을 수 있어요. 저장 공간 정리 시 오프라인 자료가 지워질 수 있어요.</p></section>`;
+  const ready=window.HERO_SINGLE_FILE?'한 파일 버전은 서비스워커를 사용하지 않아요.':offlineReady?'기본 화면·놀이·건강 안내 글·AI 인사의 오프라인 준비가 끝났어요. 사진과 추가 안내 음성은 기기에 저장된 것만 이용해요.':offlineError||'오프라인 준비를 아직 확인하지 못했어요. 온라인에서 준비를 기다려 주세요.';
+  return `<section class="notice section" aria-live="polite"><h3>사진·영상 자동확인 자료</h3><p>${escape(mode)}</p><p>수집 확인일: ${escape(when(checked))}<br>앱 동기화 시각: ${escape(when(s.syncedAt))}<br>최근 접속 시도: ${escape(when(s.attemptedAt))}</p>${s.status==='error'?`<p>실패: ${escape(text(s.error,240))}</p>`:''}${stale?'<p class="warm">공식 수집 확인일이 14일 넘게 지났어요. 오래된 자료일 수 있어요.</p>':''}<p>${escape(ready)}</p>${waiting?'<p>새 앱 버전이 준비됐어요. 작성·음성 듣기·열린 창을 마친 안전한 때 자동 적용해요.</p><button type="button" class="btn" data-hero-update="apply">새 버전 적용 안내</button>':''}<p>새 버전은 온라인으로 앱을 보고 있을 때 확인해요. 작성·음성 듣기·열린 창을 마친 안전한 때 자동 적용해요. 닫힌 앱은 다시 열 때 확인해요.</p><p class="small muted">영상·음악 재생은 인터넷이 필요해요. 새 사진은 이 기기에서 열어본 것만 오프라인에 남을 수 있어요. 저장 공간 정리 시 오프라인 자료가 지워질 수 있어요.</p></section>`;
  }
  function contents(){
   const checks=lastGood?.checks||[];
-  return `${statusHTML()}<div class="row"><button type="button" class="btn primary" data-hero-update="refresh">지금 자료 동기화</button></div><p class="small muted section">앱은 공식 사이트를 직접 수집하지 않고 이 앱 사이트의 검증된 공개 자료만 가져와요. GitHub의 매일 자동 작업이 공개 사진·영상 출처를 확인해요. 실행 지연·서비스 한도·출처 접속 오류로 갱신이 늦어질 수 있어요. 공식 일정·회원 전용 공지는 자동 수집하지 않아요. 앱 접속 시각은 공식 수집 확인일이 아니에요. 숨은 백그라운드 조회나 알림은 하지 않아요.</p>${lastGood?`<p>자료 제공: ${escape(lastGood.sourceName)}<br>자료 수정일: ${escape(when(lastGood.updatedAt))}</p>`:''}${checks.length?`<ul>${checks.map(c=>`<li><a href="${escape(c.url)}" target="_blank" rel="noopener noreferrer">${escape(c.label)}</a> · ${escape(c.status)} · ${escape(when(c.date))}</li>`).join('')}</ul>`:''}<div class="row section"><a class="btn external" href="https://www.mulgogimusic.com/" target="_blank" rel="noopener noreferrer">공식 사진 더 보기</a><a class="btn external" href="https://www.youtube.com/channel/${CHANNEL}" target="_blank" rel="noopener noreferrer">공식 영상 더 보기</a></div>`;
+  return `${statusHTML()}<div class="row"><button type="button" class="btn primary" data-hero-update="refresh">지금 자료 동기화</button></div><p class="small muted section">앱은 공식 사이트를 직접 수집하지 않고 이 앱 사이트의 검증된 공개 자료만 가져와요. GitHub의 매일 자동 작업이 공개 사진·영상 출처를 확인해요. 실행 지연·서비스 한도·출처 접속 오류로 갱신이 늦어질 수 있어요. 공식 일정·회원 전용 공지는 자동 수집하지 않아요. 앱 접속 시각은 공식 수집 확인일이 아니에요. 새 앱 버전은 화면이 보이고 온라인일 때 60초마다 확인해요. 숨기거나 닫은 앱에서는 조회나 알림을 하지 않아요.</p>${lastGood?`<p>자료 제공: ${escape(lastGood.sourceName)}<br>자료 수정일: ${escape(when(lastGood.updatedAt))}</p>`:''}${checks.length?`<ul>${checks.map(c=>`<li><a href="${escape(c.url)}" target="_blank" rel="noopener noreferrer">${escape(c.label)}</a> · ${escape(c.status)} · ${escape(when(c.date))}</li>`).join('')}</ul>`:''}<div class="row section"><a class="btn external" href="https://www.mulgogimusic.com/" target="_blank" rel="noopener noreferrer">공식 사진 더 보기</a><a class="btn external" href="https://www.youtube.com/channel/${CHANNEL}" target="_blank" rel="noopener noreferrer">공식 영상 더 보기</a></div>`;
  }
  function paint(){
   if(stopped)return;
@@ -127,41 +127,55 @@ window.createHeroUpdates=function(api){
    }finally{clearTimeout(timer);controller=null;running=null;}
   })();return running;
  }
- function safe(){const a=document.activeElement;return document.visibilityState!=='hidden'&&!document.querySelector('dialog[open],#modal[open]')&&!(a&&(a.matches?.('input,textarea,select')||a.isContentEditable||a.closest?.('[contenteditable]:not([contenteditable="false"])')));}
- function tryApply(){if(stopped||!safe())return false;if(reloadPending&&!reloaded){reloaded=true;location.reload();return true;}if(!waiting)return false;intended=true;waiting.postMessage({type:'SKIP_WAITING'});return true;}
- function seeWaiting(){if(reg?.waiting){waiting=reg.waiting;paint();tryApply();}}
+ function foreground(){return !stopped&&document.visibilityState==='visible'&&navigator.onLine!==false;}
+ function safe(){try{if(api.canReload?.()===false)return false;const a=document.activeElement;return document.visibilityState==='visible'&&!document.querySelector('dialog[open],#modal[open]')&&!(a&&(a.matches?.('input,textarea,select')||a.isContentEditable||a.closest?.('[contenteditable]:not([contenteditable="false"])')));}catch{return false;}}
+ function tryApply(){if(stopped||!safe())return false;if(reloadPending&&!reloaded){reloaded=true;location.reload();return true;}if(!waiting||intended||reloaded)return false;intended=true;waiting.postMessage({type:'SKIP_WAITING'});return true;}
+ function seeWaiting(){if(reg?.waiting){if(waiting!==reg.waiting)intended=false;waiting=reg.waiting;paint();tryApply();}}
+ function checkSW(force=false){
+  if(!foreground()||!reg||swUpdating||(!force&&Date.now()-lastSWCheck<SW_INTERVAL))return;
+  lastSWCheck=Date.now();swUpdating=true;
+  try{Promise.resolve(reg.update()).catch(()=>{}).finally(()=>{swUpdating=false;});}catch{swUpdating=false;}
+ }
+ function scheduleSW(){
+  clearTimeout(swTimer);swTimer=null;
+  if(!foreground()||!hosted||!('serviceWorker' in navigator))return;
+  swTimer=setTimeout(()=>{swTimer=null;if(!foreground())return;if(reg)checkSW();else setupSW();scheduleSW();},SW_INTERVAL);
+ }
  function inspectWorker(worker){if(!worker||swWorkers.has(worker))return;swWorkers.add(worker);on(worker,'statechange',()=>{if(worker.state==='installed')seeWaiting();if(worker.state==='redundant'&&!offlineReady){offlineError='오프라인 자료 준비에 실패했어요. 다시 온라인으로 열어 주세요.';paint();}});}
  function checkReady(){reg?.active?.postMessage({type:'CHECK_OFFLINE'});}
  async function setupSW(){
-  if(!hosted||!('serviceWorker' in navigator))return;
-  on(navigator.serviceWorker,'controllerchange',()=>{checkReady();if(hadController&&!reloaded){reloadPending=true;tryApply();}});
-  on(navigator.serviceWorker,'message',e=>{if(e.data?.type==='OFFLINE_STATUS'&&e.source===reg?.active){offlineReady=e.data.ready===true;offlineError=offlineReady?'':'오프라인 준비가 끝나지 않았어요. 온라인에서 다시 열어 주세요.';paint();}});
+  if(!hosted||!('serviceWorker' in navigator)||swSetup||reg)return;
+  if(!swBound){swBound=true;
+   on(navigator.serviceWorker,'controllerchange',()=>{checkReady();const subsequent=hadController;hadController=true;if(subsequent&&!reloaded){reloadPending=true;tryApply();}});
+   on(navigator.serviceWorker,'message',e=>{if(e.data?.type==='OFFLINE_STATUS'&&e.source===reg?.active){offlineReady=e.data.ready===true;offlineError=offlineReady?'':'오프라인 준비가 끝나지 않았어요. 온라인에서 다시 열어 주세요.';paint();}});
+  }
+  if(!foreground())return;swSetup=true;
   try{
-   reg=await navigator.serviceWorker.register(new URL('./sw.js',location.href).href,{updateViaCache:'none'});if(stopped)return;
+   const registered=await navigator.serviceWorker.register(new URL('./sw.js',location.href).href,{updateViaCache:'none'});if(stopped)return;reg=registered;
    on(reg,'updatefound',()=>inspectWorker(reg.installing));inspectWorker(reg.installing);seeWaiting();
    navigator.serviceWorker.ready.then(ready=>{if(stopped||ready.scope!==reg.scope)return;checkReady();});checkReady();
-   lastSWCheck=Date.now();reg.update().catch(()=>{});
-  }catch{offlineError='이 브라우저에서 오프라인 준비를 완료하지 못했어요.';paint();}
+   checkSW(true);
+  }catch{offlineError='이 브라우저에서 오프라인 준비를 완료하지 못했어요.';paint();}finally{swSetup=false;scheduleSW();}
  }
  function wake(){
-  if(stopped||document.visibilityState==='hidden')return;
+  if(!foreground()){scheduleSW();return;}
   seeWaiting();tryApply();checkReady();
-  if(navigator.onLine!==false&&Date.now()-lastAuto>=INTERVAL)refresh(true);
-  if(reg&&navigator.onLine!==false&&Date.now()-lastSWCheck>=INTERVAL){lastSWCheck=Date.now();reg.update().catch(()=>{});}
+  if(Date.now()-lastAuto>=INTERVAL)refresh(true);
+  if(reg)checkSW();else setupSW();scheduleSW();
  }
  function init(){
-  if(initialized)return;initialized=true;readCache();
-  on(window,'online',wake);on(window,'offline',paint);on(document,'visibilitychange',wake);
+  if(initialized||stopped)return;initialized=true;readCache();
+  on(window,'online',wake);on(window,'offline',()=>{paint();scheduleSW();});on(document,'visibilitychange',wake);
   on(document,'close',()=>{modalOpen=false;setTimeout(()=>{if(!stopped)tryApply();},0);},true);
   on(document,'focusout',()=>setTimeout(()=>{if(!stopped)tryApply();},0));
   on(document,'click',e=>{
    const button=e.target.closest?.('[data-hero-update]');if(!button)return;
    if(button.dataset.heroUpdate==='refresh')refresh(false).finally(()=>{const box=document.getElementById('hero-updates-content');if(box)box.innerHTML=contents();});
-   else if(button.dataset.heroUpdate==='apply'){if(!tryApply())notify('작성 중인 내용을 먼저 저장하고 열린 창을 닫아 주세요. 안전할 때 새 버전이 적용돼요.');}
+   else if(button.dataset.heroUpdate==='apply'){if(!tryApply())notify('작성 중인 내용을 저장하고 음성 듣기와 열린 창을 마쳐 주세요. 안전할 때 새 버전이 자동 적용돼요.');}
   });
-  setupSW();refresh(true);
+  setupSW();if(foreground())refresh(true);scheduleSW();
  }
- function stop(){stopped=true;controller?.abort();for(const off of listeners)off();listeners.length=0;}
- return {init,open,refresh,normalize,statusHTML,stop};
+ function stop(){stopped=true;clearTimeout(swTimer);swTimer=null;controller?.abort();for(const off of listeners)off();listeners.length=0;}
+ return {init,open,refresh,normalize,statusHTML,stop,applyIfSafe:tryApply};
 };
 })();

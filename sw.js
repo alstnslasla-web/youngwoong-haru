@@ -1,10 +1,10 @@
 /* Bump VERSION on every shell deployment. Dynamic JSON is deliberately never cached. */
 'use strict';
-const VERSION='v2.1.1';
+const VERSION='v2.1.2';
 const SCOPE=new URL(self.registration.scope).pathname;
 const PREFIX='youngwoong-everyday-'+encodeURIComponent(SCOPE)+'-';
 const SHELL=PREFIX+VERSION, MEDIA=PREFIX+'media';
-const FILES=['./','./index.html','./app.css','./app.js','./data.js','./wellness.js','./wellness-data.js','./companion.js','./health.js','./updates.js','./voice.js','./voice-morning.mp3','./voice-day.wav','./voice-night.mp3','./manifest.webmanifest','./icon.svg','./icon-192.png','./icon-512.png'];
+const FILES=['./','./index.html','./app.css','./app.js','./data.js','./wellness.js','./wellness-data.js','./companion.js','./health.js','./updates.js','./voice.js','./voice-morning.mp3','./voice-eunja-prefix.mp3','./voice-day.wav','./voice-night.mp3','./manifest.webmanifest','./icon.svg','./icon-192.png','./icon-512.png'];
 const URLS=FILES.map(p=>new URL(p,self.registration.scope).href), SHELL_URLS=new Set(URLS);
 const IMAGE_HOSTS=new Set(['i.ytimg.com','www.mulgogimusic.com','mulgogimusic.com']);
 let mediaQueue=Promise.resolve();

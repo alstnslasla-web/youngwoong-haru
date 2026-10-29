@@ -4,7 +4,7 @@
 const NOTICE='팬메이드 동행 도우미 · 실제 임영웅님과의 대화가 아니에요';
 const PACK_NOTICE='제공된 AI 샘플을 이용한 합성 안내이며 실제 임영웅의 녹음이나 발언이 아니에요.';
 const VOICE_NOTICE=PACK_NOTICE;
-const PUBLIC_COMPANION_READING='팬메이드 동행 도우미예요. 실제 임영웅님과의 대화가 아니에요. 제공된 AI 샘플을 이용한 합성 안내이며 실제 임영웅의 녹음이나 발언이 아니에요. 오늘도 천천히, 작은 즐거움 하나를 찾아봐요. 쉬는 것도 소중한 하루의 일부예요. 가족이나 친구에게 반가운 안부를 건네도 좋아요. 가족이 요청해 미리 만든 두 인사에는 정해진 호칭이 들어가요. 앱에 입력한 이름과 대화 내용, 개인 일정과 할 일은 읽거나 외부 서비스로 보내지 않아요.';
+const PUBLIC_COMPANION_READING="은자님을 위한 팬메이드 동행 도우미예요. 제공된 AI 샘플로 만든 합성 안내이며, 실제 임영웅의 녹음이나 대화가 아니에요. 오늘도 천천히 쉬어가요. 대화 내용과 개인 일정, 할 일은 읽거나 외부로 보내지 않아요.";
 const STYLES={warm:'온화하고 다정하게',friend:'편안한 친구',cheer:'힘을 주는 응원',secretary:'차분한 일정 비서'};
 const MOODS={good:'기분 좋아요',normal:'그저 그래요',lonely:'외로워요',tired:'지쳤어요',sad:'마음이 무거워요'};
 const own=(o,k)=>Object.prototype.hasOwnProperty.call(o,k);
@@ -34,7 +34,7 @@ window.createHeroCompanion=function(api={}){
  const today=()=>{try{const d=api.today?.();return validDate(d)?d:dateKey();}catch{return dateKey();}};
  const notify=s=>{api.toast?.(s);};
  const persist=()=>{try{api.save?.();}catch{notify('이 기기에 저장하지 못했어요.');}};
- function name(){return text(state().name,20)||'어머님';}
+ function name(){return '은자님';}
  function greetText(date=new Date()){
   const p=period(date),n=name();const t={morning:`${n}, 좋은 아침이에요. 편안히 주무셨나요? 오늘은 작은 즐거움 하나부터 찾아볼까요?`,day:`${n}, 반가워요. 오늘 하루는 어떠세요? 잠깐 쉬며 좋아하는 이야기를 나눠 봐요.`,evening:`${n}, 오늘도 애쓰셨어요. 저녁에는 편안한 마음으로 하루를 돌아봐요.`,night:`${n}, 이제 편히 쉬어갈 시간이에요. 밤에는 화면과 소리를 잠시 쉬게 하고, 내일 다시 만나요. 가족에게 잘 자라는 인사를 건네도 좋아요.`};return t[p];
  }
@@ -47,7 +47,7 @@ window.createHeroCompanion=function(api={}){
  function defaultVoiceStatus(){return 'AI 음성은 듣기 버튼을 눌러 시작해요. 개인 기록은 제외해요.';}
  function setStatus(message){voiceStatus=message;document.querySelectorAll('[data-hc-status]').forEach(el=>{el.textContent=message;});document.querySelectorAll('[data-companion="stop"]').forEach(el=>{el.setAttribute('aria-label',speaking?'읽기 멈추기':'음성 멈추기');});document.querySelectorAll('.hc-panel,.hc-card').forEach(el=>{el.dataset.hcSpeaking=String(speaking);});}
  function voiceOptions(){const c=current(),voices=localVoices(),selected=pickVoice();return voices.length?voices.map((v,i)=>`<option value="${i}" ${v===selected?'selected':''}>${esc(v.name)} · 기기 내 한국어</option>`).join(''):'<option value="">기기 내 한국어 음성 없음 · 무음</option>';}
- function voiceUI(){return `<section class="hc-section"><h3>AI 안내 듣기</h3><p class="hc-notice">${esc(VOICE_NOTICE)}</p><div class="hc-row">${button('greeting-morning','아침 인사 듣기')}${button('greeting-day','낮 인사 듣기')}${button('greeting-night','잘 자 인사 듣기')}${button('screen','동행 안내 읽기')}${button('stop','말 멈추기')}</div><p class="hc-note">가족이 요청한 아침·밤 인사에만 ‘은자야’가 들어가요. 앱에 입력한 이름이나 개인 대화·일정·할 일은 읽지 않아요. 버튼을 골라 미리 준비된 인사를 들어요. 아침·밤 인사의 호칭은 고정되어 있어 설정의 이름을 바꿔도 달라지지 않아요. 처음 음성을 내려받을 때는 인터넷이 필요하고 저장된 음성만 오프라인에서 들을 수 있어요.</p><p data-hc-status role="status">${esc(defaultVoiceStatus())}</p></section>`;}
+ function voiceUI(){return `<section class="hc-section"><h3>AI 안내 듣기</h3><p class="hc-notice">${esc(VOICE_NOTICE)}</p><div class="hc-row">${button('greeting-morning','아침 인사 듣기')}${button('greeting-day','낮 인사 듣기')}${button('greeting-night','잘 자 인사 듣기')}${button('screen','동행 안내 읽기')}${button('stop','말 멈추기')}</div><p class="hc-note">은자님을 위한 앱의 인사와 안내 음성은 모두 ‘은자야’로 시작해요. 개인 대화·일정·할 일은 읽거나 음성 서비스로 보내지 않아요. 버튼을 골라 미리 준비된 인사를 들어요. 공식 영상과 노래의 원본 소리는 바꾸지 않아요. 처음 음성을 내려받을 때는 인터넷이 필요하고 저장된 음성만 오프라인에서 들을 수 있어요.</p><p data-hc-status role="status">${esc(defaultVoiceStatus())}</p></section>`;}
  function events(){try{const list=api.getEventsForToday?.();return Array.isArray(list)?list.filter(obj).slice(0,50):[];}catch{return [];}}
  function eventText(){const list=events();return list.length?list.map(e=>`${text(e.time,20)?text(e.time,20)+' ':''}${text(e.title,160)||'제목 없는 일정'}${text(e.place,100)?' · '+text(e.place,100):''}`).join('\n'):'오늘 등록된 개인 일정은 없어요. 달력에서 일정을 적어 둘 수 있어요.';}
  function tasksHTML(){const c=current(),tasks=c.days[selectedDate]?.tasks||[];return `<section class="hc-section" id="hc-task-section"><h3>날짜별 작은 할 일</h3><label class="hc-label" for="hc-date">확인할 날짜 · 한국 시간</label><input id="hc-date" type="date" value="${esc(selectedDate)}" data-hc-change="date"><div class="hc-row">${button('date-prev','전날')}${button('date-today','오늘')}${button('date-next','다음 날')}</div><p>${esc(selectedDate)} · ${tasks.filter(t=>t.done).length} / ${tasks.length}개 완료</p><ul class="hc-tasks">${tasks.map((t,i)=>`<li><label class="${t.done?'hc-done':''}"><input type="checkbox" data-hc-change="task" data-hc-index="${i}" ${t.done?'checked':''}>${esc(t.text)}</label>${button('task-remove','삭제',`data-hc-index="${i}" aria-label="${esc(t.text)} 삭제"`)}</li>`).join('')||'<li>적어 둔 할 일이 없어요. 작은 일 하나부터 시작해요.</li>'}</ul><form id="hc-task-form"><label class="hc-label" for="hc-task-input">할 일 추가 · 하루 최대 8개</label><input id="hc-task-input" name="task" maxlength="100" autocomplete="off" placeholder="예: 가족에게 안부 전하기" ${tasks.length>=8?'disabled':''}><div class="hc-row"><button class="hc-btn" type="submit" ${tasks.length>=8?'disabled':''}>할 일 담기</button></div></form><p class="hc-note">완료 표시는 선택한 날짜에만 저장돼요. 다른 날짜에는 자동으로 옮겨지지 않아요. 최대 최근 730일치 날짜 기록을 보관해요.</p></section>`;}
