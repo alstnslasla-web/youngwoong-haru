@@ -28,8 +28,8 @@ jobs:
           cmake -S "$work/src" -B "$work/build" -DCMAKE_BUILD_TYPE=Release
           cmake --build "$work/build" --target whisper-cli -j2 --config Release
           cd "$work/src"
-          sh ./models/download-ggml-model.sh small
-          echo '55356645c2b361a969dfd0ef2c5a50d530afd8d5  models/ggml-small.bin' | sha1sum -c -
+          sh ./models/download-ggml-model.sh medium
+          echo 'fd9727b6e1217c2f614f9b698455c4ffd82463b4  models/ggml-medium.bin' | sha1sum -c -
       - name: Download only the requested prepared clips
         shell: bash
         run: |
@@ -68,7 +68,7 @@ jobs:
             source="$work/$name.mp3"
             if test "$name" = reference; then source="$work/reference.wav"; fi
             ffmpeg -nostdin -y -v error -i "$source" -ar 16000 -ac 1 -c:a pcm_s16le "$work/$name-16k.wav"
-            "$work/build/bin/whisper-cli" -m "$work/src/models/ggml-small.bin" -l ko -ng -f "$work/$name-16k.wav" -otxt -oj -of "$work/$name-transcript"
+            "$work/build/bin/whisper-cli" -m "$work/src/models/ggml-medium.bin" -l ko -ng -f "$work/$name-16k.wav" -otxt -oj -of "$work/$name-transcript"
           done
       - name: Report text and audio fingerprints, not listening approval
         shell: bash
@@ -79,7 +79,7 @@ jobs:
           const root=path.join(process.env.RUNNER_TEMP,'greeting-asr'),rows=JSON.parse(await fs.readFile(path.join(root,'inputs.json'),'utf8'));
           const normalize=s=>s.normalize('NFC').replace(/[^가-힣a-zA-Z0-9]/g,'').toLowerCase();
           for(const row of rows){row.transcript=(await fs.readFile(path.join(root,row.id+'-transcript.txt'),'utf8')).trim();row.normalizedTextMatch=normalize(row.text)===normalize(row.transcript);}
-          const report={model:'whisper.cpp multilingual small',vendorCommit:'284029c07012d2000941a08d38a31ffb71f4734e',language:'ko',noGpu:true,noPrompt:true,noTrimming:true,checkedAt:new Date().toISOString(),rows,caveat:'ASR can omit, hallucinate or misrecognize words. Not human listening, speaker identity, authorization or perfect absence-of-extra-speech proof.'};
+          const report={model:'whisper.cpp multilingual medium',vendorCommit:'284029c07012d2000941a08d38a31ffb71f4734e',language:'ko',noGpu:true,noPrompt:true,noTrimming:true,checkedAt:new Date().toISOString(),rows,caveat:'ASR can omit, hallucinate or misrecognize words. Not human listening, speaker identity, authorization or perfect absence-of-extra-speech proof.'};
           await fs.appendFile(process.env.GITHUB_STEP_SUMMARY,'## Requested greeting ASR check\n\n'+JSON.stringify(report,null,2)+'\n');
           NODE
 # Manual only. No uploads, commits, deployment, models or saved prompts published.
