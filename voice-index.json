@@ -340,6 +340,15 @@
       "sampleRate": 24000,
       "channels": 1
     },
+    "2f91af3055b8180c0aaeeba3cee1077eda551641fbe32dd6f822253b9c9e7c7a": {
+      "text": "은자님을 위한 팬메이드 동행 도우미예요. 제공된 AI 샘플로 만든 합성 안내이며, 실제 임영웅의 녹음이나 대화가 아니에요. 오늘도 천천히 쉬어가요. 대화 내용과 개인 일정, 할 일은 읽거나 외부로 보내지 않아요.",
+      "src": "./voice-clips/2f91af3055b8180c0aaeeba3cee1077eda551641fbe32dd6f822253b9c9e7c7a.mp3",
+      "bytes": 106221,
+      "durationSeconds": 13.248,
+      "codec": "mp3",
+      "sampleRate": 24000,
+      "channels": 1
+    },
     "2f96096fccb1e61e1b0dba78e0c6218f1e0f8d26647095f29d82cdb4ef039910": {
       "text": "선택한 공식 영상. 임영웅 IM HERO 10 'New York' Highlight Chorus Ver. #IMHERO10 #NewYork 공식 채널. 임영웅 공개일. 2026-09-23 영상 재생은 공식 플레이어나 유튜브 링크를 이용해요. 직접 넣은 가사, 연습 메모와",
       "src": "./voice-clips/2f96096fccb1e61e1b0dba78e0c6218f1e0f8d26647095f29d82cdb4ef039910.mp3",
@@ -826,6 +835,15 @@
       "sampleRate": 24000,
       "channels": 1
     },
+    "7f76372cbb0bf40e1ef22b1ef1e6c0a3daddebbe144c76670c7c375a5b7fd597": {
+      "text": "은자님 전용 설정이에요. 글자를 크고 진하게 바꿀 수 있어요. 개인 기록은 읽지 않아요.",
+      "src": "./voice-clips/7f76372cbb0bf40e1ef22b1ef1e6c0a3daddebbe144c76670c7c375a5b7fd597.mp3",
+      "bytes": 38445,
+      "durationSeconds": 4.776,
+      "codec": "mp3",
+      "sampleRate": 24000,
+      "channels": 1
+    },
     "81428516a848dcd3d7f51533c2c1a7a1c1e811fa3e127c0a6ad0a72df99d6903": {
       "text": "은자야. 잘 자. 좋은 꿈 꿔. 오늘 하루도 고생했어.",
       "src": "./voice-clips/81428516a848dcd3d7f51533c2c1a7a1c1e811fa3e127c0a6ad0a72df99d6903.mp3",
@@ -1155,6 +1173,15 @@
       "src": "./voice-clips/a8e61dac0ef11615dce1c95a869b0e3f44c7eb80e2d7e446d5f79f4a2bce6688.mp3",
       "bytes": 151149,
       "durationSeconds": 18.864,
+      "codec": "mp3",
+      "sampleRate": 24000,
+      "channels": 1
+    },
+    "a94aaba74bfcf989da3665d616358d5c456204787d04f349584dd4506d65925e": {
+      "text": "은자님 전용 AI 안내예요. 제공된 AI 샘플로 만든 합성 음성이며 실제 임영웅의 녹음·발언·의료 추천이 아니에요. 개인 기록은 읽거나 외부로 보내지 않아요. 준비된 호칭과 공개 안내만 재생해요. 인터넷에서 처음 내려받고, 저장된 음성만 오프라인으로 들어요.",
+      "src": "./voice-clips/a94aaba74bfcf989da3665d616358d5c456204787d04f349584dd4506d65925e.mp3",
+      "bytes": 146541,
+      "durationSeconds": 18.288,
       "codec": "mp3",
       "sampleRate": 24000,
       "channels": 1
@@ -2017,9 +2044,9 @@
     },
     {
       "id": "guide-4",
-      "text": "은자님 전용 설정이에요. 글자 크기와 화면 대비를 편하게 바꿀 수 있어요. 개인 기록은 읽지 않아요.",
+      "text": "은자님 전용 설정이에요. 글자를 크고 진하게 바꿀 수 있어요. 개인 기록은 읽지 않아요.",
       "chunks": [
-        "6e34bc507de27d7961b17a718c189c094a40f8eaec3251a899bd8dacfd00288d"
+        "7f76372cbb0bf40e1ef22b1ef1e6c0a3daddebbe144c76670c7c375a5b7fd597"
       ],
       "partial": false,
       "complete": true
@@ -3358,20 +3385,18 @@
     },
     {
       "id": "companion-public",
-      "text": "팬메이드 동행 도우미예요. 실제 임영웅님과의 대화가 아니에요. 제공된 AI 샘플을 이용한 합성 안내이며 실제 임영웅의 녹음이나 발언이 아니에요. 오늘도 천천히, 작은 즐거움 하나를 찾아봐요. 쉬는 것도 소중한 하루의 일부예요. 가족이나 친구에게 반가운 안부를 건네도 좋아요. 은자님을 위해 준비한 앱의 인사와 공개 안내는 정해진 호칭 은자야로 시작해요. 앱에 입력한 이름과 대화 내용, 개인 일정과 할 일은 읽거나 외부 서비스로 보내지 않아요.",
+      "text": "은자님을 위한 팬메이드 동행 도우미예요. 제공된 AI 샘플로 만든 합성 안내이며, 실제 임영웅의 녹음이나 대화가 아니에요. 오늘도 천천히 쉬어가요. 대화 내용과 개인 일정, 할 일은 읽거나 외부로 보내지 않아요.",
       "chunks": [
-        "5d57c18274cc791f6af86e214364af056e14622761463704f70f9e90d4d8c756",
-        "89ee4584e34419c10036edabf4608b6dd19d26cdb91b95e76f2e3c4e1f455ab6"
+        "2f91af3055b8180c0aaeeba3cee1077eda551641fbe32dd6f822253b9c9e7c7a"
       ],
       "partial": false,
       "complete": true
     },
     {
       "id": "voice-settings",
-      "text": "은자님 전용 AI 음성 안내예요. 제공된 AI 샘플을 바탕으로 만든 합성 음성입니다. 실제 임영웅의 녹음·발언·의료 추천이 아닙니다. 앱의 인사와 안내 음성은 미리 준비한 고정 호칭 은자야로 시작해요. 앱에 미리 준비한 공개 안내만 재생해요. 개인 기록이나 다른 이름, 새 문장은 보내거나 합성하지 않아요. 첫 다운로드에는 인터넷이 필요하며 이 기기에 저장된 음성만 오프라인에서 다시 들을 수 있어요.",
+      "text": "은자님 전용 AI 안내예요. 제공된 AI 샘플로 만든 합성 음성이며 실제 임영웅의 녹음·발언·의료 추천이 아니에요. 개인 기록은 읽거나 외부로 보내지 않아요. 준비된 호칭과 공개 안내만 재생해요. 인터넷에서 처음 내려받고, 저장된 음성만 오프라인으로 들어요.",
       "chunks": [
-        "a8e61dac0ef11615dce1c95a869b0e3f44c7eb80e2d7e446d5f79f4a2bce6688",
-        "bbce20dcd120473289e56a7ed0dcf608689573fbf17b051921f2d24276003744"
+        "a94aaba74bfcf989da3665d616358d5c456204787d04f349584dd4506d65925e"
       ],
       "partial": false,
       "complete": true
