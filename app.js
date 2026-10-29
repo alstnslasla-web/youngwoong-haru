@@ -14,11 +14,12 @@ const validDate=s=>/^\d{4}-\d{2}-\d{2}$/.test(s)&&!isNaN(Date.parse(s+'T12:00:00
 const addDays=(s,n)=>dayKey(new Date(Date.parse(s+'T12:00:00+09:00')+n*864e5));
 const prettyDate=s=>new Intl.DateTimeFormat('ko-KR',{month:'long',day:'numeric',weekday:'short',timeZone:'Asia/Seoul'}).format(new Date(s+'T12:00:00+09:00'));
 const today=()=>dayKey();
-const defaults=()=>({v:1,name:'어머님',font:0,contrast:false,days:{},favoriteSongs:[],favoritePhotos:[],notes:[],practice:{},mistakes:[],review:{},events:[],feedUrl:/^https?:/.test(location.protocol)?new URL('./schedule.json',location.href).href:'',feedEvents:[],feedChecked:'',feedUpdated:'',feedStatus:'아직 연결하지 않았어요.'});
+const defaults=()=>({v:1,name:'은자님',font:0,contrast:false,days:{},favoriteSongs:[],favoritePhotos:[],notes:[],practice:{},mistakes:[],review:{},events:[],feedUrl:/^https?:/.test(location.protocol)?new URL('./schedule.json',location.href).href:'',feedEvents:[],feedChecked:'',feedUpdated:'',feedStatus:'아직 연결하지 않았어요.'});
 let state=defaults(), storageOK=true;
 let wellness=null, companion=null, health=null, updates=null, voice=null;
 let modalNarration=null;
 try{const raw=JSON.parse(localStorage.getItem(KEY)||'null');if(raw&&raw.v===1)state={...state,...raw}}catch{storageOK=false}
+if(state.name==='어머님')state.name='은자님'; // Update only the previous generic default; keep custom names and records.
 let route='home', songFilter='전체', searchTerm='', photoFilter='전체', calendarMonth=today().slice(0,7), selectedDate=today(), lastFocus=null, cleanup=null, player=null, ytLoading=null, loopTimer=null, lyricTimer=null, micStream=null, recorder=null, recordingURL=null, syncing=false, installPrompt=null;
 function toast(msg){$('#toast').textContent=msg;clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('#toast').textContent='',4200)}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state));storageOK=true;return true}catch{storageOK=false;toast('기기에 저장하지 못했어요. 설정에서 백업 파일을 받아 주세요.');return false}}
@@ -232,5 +233,5 @@ state.wellness=wellness.normalize(state.wellness);state.companion=companion.norm
 $('#brand-icon').innerHTML=icon('heart');$('#settings-icon').innerHTML=icon('settings');dayState();save();applySettings();render();if(!navigator.onLine)$('#offline').classList.add('show');
 if(state.feedUrl)refreshFeed(true);setInterval(()=>{if(!document.hidden&&state.feedUrl)refreshFeed(true)},15*60e3);
 updates.init();
-window.HeroApp={parseLyrics,parseICS,toICS,normalizeEvents,validateBackup,parseFeed,dayKey,addDays,validDate,wellnessNormalize:wellness.normalize,companionNormalize:companion.normalize,mediaNormalize:updates.normalize,version:'2.1.0'};
+window.HeroApp={parseLyrics,parseICS,toICS,normalizeEvents,validateBackup,parseFeed,dayKey,addDays,validDate,wellnessNormalize:wellness.normalize,companionNormalize:companion.normalize,mediaNormalize:updates.normalize,version:'2.1.1'};
 })();

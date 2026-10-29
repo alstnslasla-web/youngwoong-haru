@@ -2,10 +2,10 @@
 (() => {
 'use strict';
 const NOTICE='제공된 AI 샘플을 바탕으로 만든 합성 음성입니다. 실제 임영웅의 녹음·발언·의료 추천이 아닙니다.';
-const REF_TEXT='안녕하세요. 좋은 아침이에요. 잘 잤어요?';
+const REF_TEXT='좋은 아침이야, 은자야.';
 const DAY_TEXT='AI로 만든 팬 인사예요. 반가워요. 좋아하는 노래 한 곡 들으며 잠깐 쉬어 가세요. 오늘도 편안한 하루 보내세요.';
-const EVENING_TEXT='AI로 만든 팬 인사예요. 오늘 하루도 수고 많으셨어요. 편안하게 쉬시고, 좋은 밤 보내세요.';
-const PACKS={morning:{src:'./voice-reference.wav',text:REF_TEXT},day:{src:'./voice-day.wav',text:DAY_TEXT},evening:{src:'./voice-evening.wav',text:EVENING_TEXT},night:{src:'./voice-evening.wav',text:EVENING_TEXT}};
+const EVENING_TEXT='은자야. 잘 자. 좋은 꿈 꿔. 오늘 하루도 고생했어.';
+const PACKS={morning:{src:'./voice-morning.mp3',text:REF_TEXT},day:{src:'./voice-day.wav',text:DAY_TEXT},evening:{src:'./voice-night.mp3',text:EVENING_TEXT},night:{src:'./voice-night.mp3',text:EVENING_TEXT}};
 const MODEL='Qwen/Qwen3-TTS-12Hz-0.6B-Base', REFERENCE='39eb74c151d439ea2f41ad53a7e11560cfe407793d8323be3a2e30d5193d5cb5', COMMIT='022e286b98fbec7e1e916cb940cdf532cd9f488e';
 const VERSION='public-cpu-v1:'+MODEL+':'+REFERENCE;
 const MAX_BYTES=2*1024*1024, INDEX_BYTES=1024*1024, CACHE_BYTES=30*1024*1024, MAX_CHUNKS=12, TIMEOUT=20000, CATALOG_TTL=15*60*1000;
