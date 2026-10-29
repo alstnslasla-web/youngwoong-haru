@@ -39,7 +39,7 @@ jobs:
           import path from 'node:path';
           import {createHash} from 'node:crypto';
           const base='https://raw.githubusercontent.com/alstnslasla-web/youngwoong-haru/refs/heads/main/';
-          const rows=[{id:'morning',text:'좋은 아침이야, 은자야.'},{id:'night',text:'은자야, 잘 자. 좋은 꿈 꿔. 오늘 하루도 고생했어.'}];
+          const rows=[{id:'morning',text:'좋은 아침이야, 은자야.'},{id:'night',text:'은자야. 잘 자. 좋은 꿈 꿔. 오늘 하루도 고생했어.'}];
           const out=path.join(process.env.RUNNER_TEMP,'greeting-asr');
           let idx;
           for(let n=0;n<30;n++){
