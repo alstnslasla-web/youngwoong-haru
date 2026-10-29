@@ -1,0 +1,77 @@
+name: Check requested greeting audio on FREE CPU
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: greeting-asr-main
+  cancel-in-progress: false
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build pinned official whisper.cpp on CPU
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/greeting-asr"
+          mkdir -p "$work"
+          git clone https://github.com/ggml-org/whisper.cpp.git "$work/src"
+          git -C "$work/src" checkout --detach 284029c07012d2000941a08d38a31ffb71f4734e
+          cmake -S "$work/src" -B "$work/build" -DCMAKE_BUILD_TYPE=Release
+          cmake --build "$work/build" --target whisper-cli -j2 --config Release
+          cd "$work/src"
+          sh ./models/download-ggml-model.sh small
+          echo '55356645c2b361a969dfd0ef2c5a50d530afd8d5  models/ggml-small.bin' | sha1sum -c -
+      - name: Download only the requested prepared clips
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module - <<'NODE'
+          import fs from 'node:fs/promises';
+          import path from 'node:path';
+          import {createHash} from 'node:crypto';
+          const base='https://raw.githubusercontent.com/alstnslasla-web/youngwoong-haru/refs/heads/main/';
+          const rows=[{id:'morning',text:'좋은 아침이야, 은자야.'},{id:'night',text:'은자야, 잘 자. 좋은 꿈 꿔. 오늘 하루도 고생했어.'}];
+          const out=path.join(process.env.RUNNER_TEMP,'greeting-asr');
+          let idx;
+          for(let n=0;n<30;n++){
+            const r=await fetch(base+'voice-index.json?asr='+Date.now(),{signal:AbortSignal.timeout(20000)});
+            if(r.ok){const j=await r.json();if(j.model!=='Qwen/Qwen3-TTS-12Hz-0.6B-Base'||j.vendorCommit!=='022e286b98fbec7e1e916cb940cdf532cd9f488e'||j.referenceSha256!=='39eb74c151d439ea2f41ad53a7e11560cfe407793d8323be3a2e30d5193d5cb5')throw Error('Provenance mismatch');if(rows.every(x=>{const h=createHash('sha256').update(x.text).digest('hex');return j.clips?.[h]?.text===x.text;})){idx=j;break;}}
+            await new Promise(r=>setTimeout(r,20000));
+          }
+          if(!idx)throw Error('Requested greeting assets not ready within bounded wait');
+          for(const row of rows){const hash=createHash('sha256').update(row.text).digest('hex'),c=idx.clips[hash];if(c.src!=='./voice-clips/'+hash+'.mp3'||c.bytes>2097152)throw Error('Clip path or size');const r=await fetch(base+c.src.slice(2)+'?asr='+Date.now(),{signal:AbortSignal.timeout(30000)});if(!r.ok)throw Error('Clip HTTP');const b=Buffer.from(await r.arrayBuffer());if(b.length!==c.bytes)throw Error('Clip bytes');await fs.writeFile(path.join(out,row.id+'.mp3'),b);row.audioSha256=createHash('sha256').update(b).digest('hex');row.bytes=b.length;}
+          const ref=await fs.readFile('voice-reference.wav');if(createHash('sha256').update(ref).digest('hex')!=='39eb74c151d439ea2f41ad53a7e11560cfe407793d8323be3a2e30d5193d5cb5')throw Error('Reference identity');await fs.writeFile(path.join(out,'reference.wav'),ref);rows.push({id:'reference',text:'안녕하세요. 좋은 아침이에요. 잘 잤어요?',audioSha256:createHash('sha256').update(ref).digest('hex'),bytes:ref.length});await fs.writeFile(path.join(out,'inputs.json'),JSON.stringify(rows));
+          NODE
+      - name: Transcribe full files from time zero without prompt or trimming
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/greeting-asr"
+          for name in morning night reference; do
+            source="$work/$name.mp3"
+            if test "$name" = reference; then source="$work/reference.wav"; fi
+            ffmpeg -nostdin -y -v error -i "$source" -ar 16000 -ac 1 -c:a pcm_s16le "$work/$name-16k.wav"
+            "$work/build/bin/whisper-cli" -m "$work/src/models/ggml-small.bin" -l ko -ng -f "$work/$name-16k.wav" -otxt -oj -of "$work/$name-transcript"
+          done
+      - name: Report text and audio fingerprints, not listening approval
+        shell: bash
+        run: |
+          node --input-type=module - <<'NODE'
+          import fs from 'node:fs/promises';
+          import path from 'node:path';
+          const root=path.join(process.env.RUNNER_TEMP,'greeting-asr'),rows=JSON.parse(await fs.readFile(path.join(root,'inputs.json'),'utf8'));
+          const normalize=s=>s.normalize('NFC').replace(/[^가-힣a-zA-Z0-9]/g,'').toLowerCase();
+          for(const row of rows){row.transcript=(await fs.readFile(path.join(root,row.id+'-transcript.txt'),'utf8')).trim();row.normalizedTextMatch=normalize(row.text)===normalize(row.transcript);}
+          const report={model:'whisper.cpp multilingual small',vendorCommit:'284029c07012d2000941a08d38a31ffb71f4734e',language:'ko',noGpu:true,noPrompt:true,noTrimming:true,checkedAt:new Date().toISOString(),rows,caveat:'ASR can omit, hallucinate or misrecognize words. Not human listening, speaker identity, authorization or perfect absence-of-extra-speech proof.'};
+          await fs.appendFile(process.env.GITHUB_STEP_SUMMARY,'## Requested greeting ASR check\n\n'+JSON.stringify(report,null,2)+'\n');
+          NODE
+# Manual only. No uploads, commits, deployment, models or saved prompts published.
