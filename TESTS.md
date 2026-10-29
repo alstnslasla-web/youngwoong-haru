@@ -155,3 +155,18 @@
 - 밤 꿔/꾸, 동행 도우미/도움이, 음성 안내의 임영웅/임명 및 외부/웹 등 전사 차이는 남음. 따라서 모든 낱말의 정확한 발음·청취 품질이 검증되었다고 주장하지 않음.
 - 짧은 완결 문장 교체 후 이전 조각 끝의 '응원합니다'/'다 정해져 있습니다' 추가 구절은 이번 전사에 나타나지 않음. 이것만으로 완벽한 무첨가를 보장하지 않음.
 - 전사 대상의 오디오 SHA-256은 기술 검사 대상 파일과 일치. 공개 인사 파일은 생성 참고용 샘플과 별개이며 참조 샘플 자체는 재생·런타임 배포하지 않음.
+
+
+## v2.1.2 production acceptance (2026-10-29)
+
+- Published on the unchanged Netlify URL at 12:37 KST; app source commit `1ff5303`. No paid upgrade or extra login.
+- 14 source-upload files match GitHub. All 21 served runtime endpoints returned HTTP 200. 20 are byte-identical; HTML differs only by the verified non-executable Netlify hosting comment. `_headers` and `_redirects` are deployment configuration, not public-file checks.
+- Actual app reports version 2.1.2; service worker activated with no waiting/installing worker. The 19-resource v2.1.2 shell cache has all HTTP 200 responses; the old v2.1.1 shell cache is gone. Reopening the already-open old app initiated the first transition.
+- Actual personal records in all 10 protected fields remain unchanged. The settings field displays 은자님 and is read-only. This is not a real custom-name migration or real backup-restore test.
+- Native browser playback: new morning 1.60 s and unchanged night 4.88 s each used one file, without a duplicated prefix. Day used prefix 1.52 s then body 7.60 s. All three selected sequences ended without audio errors at current/default rate 0.9. The first morning attempt was interrupted; the foreground retry completed.
+- Native settings guide fetched the manifest, complete guide and prefix before first sound. It played the prefix then the exact final guide-4 audio, and both files ended. Blob SHA identities match the audited files. This is selected native playback, not listening to all 202 files.
+- Explicit stop, modal close and route navigation stopped an unfinished body. Native hidden-stop observation: true. The initial immediate read after switching tabs preceded the queued stop event; the final event record supersedes it.
+- Foreground service-worker update calls were observed; a real approximately 60-second gap was observed: false. Mock results remain 27/27 voice and 20/20 updates. Safe deferral with a future waiting worker and controlled multi-tab/physical-phone acceptance were not tested here.
+- Final selected whole-file medium ASR run 40811999518 succeeded. Prefix and morning are normalized-exact; all selected greeting openings contain 은자야. Remaining night/guide transcription differences and lack of human listening/likeness/rights verification remain documented. ASR is no longer pending.
+- Final local launcher is 2,652 bytes and two-file installation ZIP is 3,098 bytes. The deployment ZIP is 2,445,226 bytes, 23 files; no synthesis reference/model/prompt/private records/QA probes are deployed.
+- Evidence: eunja-v212-production-acceptance-20261029.json, eunja-v212-final-native-playback-20261029.json, eunja-v212-native-public-guide-20261029.json, eunja-v212-production-cache-20261029.json, eunja-v212-record-preservation-20261029.json. These are local QA reports, not private-data uploads.
