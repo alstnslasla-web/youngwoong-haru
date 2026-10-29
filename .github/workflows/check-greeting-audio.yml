@@ -51,6 +51,14 @@ jobs:
           for(const row of rows){const hash=createHash('sha256').update(row.text).digest('hex'),c=idx.clips[hash];if(c.src!=='./voice-clips/'+hash+'.mp3'||c.bytes>2097152)throw Error('Clip path or size');const r=await fetch(base+c.src.slice(2)+'?asr='+Date.now(),{signal:AbortSignal.timeout(30000)});if(!r.ok)throw Error('Clip HTTP');const b=Buffer.from(await r.arrayBuffer());if(b.length!==c.bytes)throw Error('Clip bytes');await fs.writeFile(path.join(out,row.id+'.mp3'),b);row.audioSha256=createHash('sha256').update(b).digest('hex');row.bytes=b.length;}
           const ref=await fs.readFile('voice-reference.wav');if(createHash('sha256').update(ref).digest('hex')!=='39eb74c151d439ea2f41ad53a7e11560cfe407793d8323be3a2e30d5193d5cb5')throw Error('Reference identity');await fs.writeFile(path.join(out,'reference.wav'),ref);rows.push({id:'reference',text:'안녕하세요. 좋은 아침이에요. 잘 잤어요?',audioSha256:createHash('sha256').update(ref).digest('hex'),bytes:ref.length});await fs.writeFile(path.join(out,'inputs.json'),JSON.stringify(rows));
           NODE
+      - name: Ensure FFmpeg PCM converter is available
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! command -v ffmpeg >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y --no-install-recommends ffmpeg
+          fi
       - name: Transcribe full files from time zero without prompt or trimming
         shell: bash
         run: |
