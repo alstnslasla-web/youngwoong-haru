@@ -39,7 +39,7 @@ jobs:
           import path from 'node:path';
           import {createHash} from 'node:crypto';
           const base='https://raw.githubusercontent.com/alstnslasla-web/youngwoong-haru/refs/heads/main/';
-          const rows=[{id:'morning',text:'좋은 아침이야, 은자야.'},{id:'night',text:'은자야. 잘 자. 좋은 꿈 꿔. 오늘 하루도 고생했어.'}];
+          const rows=[{"id":"prefix","text":"은자야."},{"id":"morning","text":"은자야. 좋은 아침이야."},{"id":"night","text":"은자야. 잘 자. 좋은 꿈 꿔. 오늘 하루도 고생했어."},{"id":"changed-1","text":"팬메이드 동행 도우미예요. 실제 임영웅님과의 대화가 아니에요. 제공된 AI 샘플을 이용한 합성 안내이며 실제 임영웅의 녹음이나 발언이 아니에요. 오늘도 천천히, 작은 즐거움 하나를 찾아봐요. 쉬는 것도 소중한 하루의 일부예요. 가족이나 친구에게 반가운 안부를 건네도 좋아요. 은자님을"},{"id":"changed-2","text":"위해 준비한 앱의 인사와 공개 안내는 정해진 호칭 은자야로 시작해요. 앱에 입력한 이름과 대화 내용, 개인 일정과 할 일은 읽거나 외부 서비스로 보내지 않아요."},{"id":"changed-3","text":"은자님 전용 AI 음성 안내예요. 제공된 AI 샘플을 바탕으로 만든 합성 음성입니다. 실제 임영웅의 녹음·발언·의료 추천이 아닙니다. 앱의 인사와 안내 음성은 미리 준비한 고정 호칭 은자야로 시작해요. 앱에 미리 준비한 공개 안내만 재생해요. 개인 기록이나 다른 이름, 새 문장은"},{"id":"changed-4","text":"보내거나 합성하지 않아요. 첫 다운로드에는 인터넷이 필요하며 이 기기에 저장된 음성만 오프라인에서 다시 들을 수 있어요."},{"id":"changed-5","text":"은자님 전용 설정이에요. 글자 크기와 화면 대비를 편하게 바꿀 수 있어요. 개인 기록은 읽지 않아요."}];
           const out=path.join(process.env.RUNNER_TEMP,'greeting-asr');
           let idx;
           for(let n=0;n<30;n++){
@@ -64,7 +64,7 @@ jobs:
         run: |
           set -euo pipefail
           work="$RUNNER_TEMP/greeting-asr"
-          for name in morning night reference; do
+          for name in prefix morning night changed-1 changed-2 changed-3 changed-4 changed-5 reference; do
             source="$work/$name.mp3"
             if test "$name" = reference; then source="$work/reference.wav"; fi
             ffmpeg -nostdin -y -v error -i "$source" -ar 16000 -ac 1 -c:a pcm_s16le "$work/$name-16k.wav"
@@ -78,7 +78,7 @@ jobs:
           import path from 'node:path';
           const root=path.join(process.env.RUNNER_TEMP,'greeting-asr'),rows=JSON.parse(await fs.readFile(path.join(root,'inputs.json'),'utf8'));
           const normalize=s=>s.normalize('NFC').replace(/[^가-힣a-zA-Z0-9]/g,'').toLowerCase();
-          for(const row of rows){row.transcript=(await fs.readFile(path.join(root,row.id+'-transcript.txt'),'utf8')).trim();row.normalizedTextMatch=normalize(row.text)===normalize(row.transcript);}
+          for(const row of rows){row.transcript=(await fs.readFile(path.join(root,row.id+'-transcript.txt'),'utf8')).trim();row.normalizedTextMatch=normalize(row.text)===normalize(row.transcript);row.startsWithFixedName=["prefix","morning","night"].includes(row.id)?normalize(row.transcript).startsWith("은자야"):null;}
           const report={model:'whisper.cpp multilingual medium',vendorCommit:'284029c07012d2000941a08d38a31ffb71f4734e',language:'ko',noGpu:true,noPrompt:true,noTrimming:true,checkedAt:new Date().toISOString(),rows,caveat:'ASR can omit, hallucinate or misrecognize words. Not human listening, speaker identity, authorization or perfect absence-of-extra-speech proof.'};
           await fs.appendFile(process.env.GITHUB_STEP_SUMMARY,'## Requested greeting ASR check\n\n'+JSON.stringify(report,null,2)+'\n');
           NODE
