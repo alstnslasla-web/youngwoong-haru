@@ -232,6 +232,15 @@
       "sampleRate": 24000,
       "channels": 1
     },
+    "214d29cd7b5b01f122b1d23289ae753479be032c016ce44ea8c9677b730a94ee": {
+      "text": "요청해 미리 만든 두 인사에는 정해진 호칭이 들어가요. 앱에 입력한 이름과 대화 내용, 개인 일정과 할 일은 읽거나 외부 서비스로 보내지 않아요.",
+      "src": "./voice-clips/214d29cd7b5b01f122b1d23289ae753479be032c016ce44ea8c9677b730a94ee.mp3",
+      "bytes": 71661,
+      "durationSeconds": 8.928,
+      "codec": "mp3",
+      "sampleRate": 24000,
+      "channels": 1
+    },
     "21563cca1f434091cc75b431af8ab465b1dd1b905829f0f0ffe8f6b560b265b1": {
       "text": "10.09. Do or Die. 디지털 싱글. 2024.05.06. Home / 온기. 디지털 싱글. 2025.04.14. 천국보다 아름다운. 디지털 싱글. 2025.08.29. IM HERO 2. 두 번째 정규앨범. 2026.09.08. IM HERO 10. 공식 앨범 목록에 공개",
       "src": "./voice-clips/21563cca1f434091cc75b431af8ab465b1dd1b905829f0f0ffe8f6b560b265b1.mp3",
@@ -871,6 +880,15 @@
       "sampleRate": 24000,
       "channels": 1
     },
+    "8f92559a89e4122d5dfc1a52350e9e65af73cc48a7416d0915e5f7483d8e50e9": {
+      "text": "팬메이드 동행 도우미예요. 실제 임영웅님과의 대화가 아니에요. 제공된 AI 샘플을 이용한 합성 안내이며 실제 임영웅의 녹음이나 발언이 아니에요. 오늘도 천천히, 작은 즐거움 하나를 찾아봐요. 쉬는 것도 소중한 하루의 일부예요. 가족이나 친구에게 반가운 안부를 건네도 좋아요. 가족이",
+      "src": "./voice-clips/8f92559a89e4122d5dfc1a52350e9e65af73cc48a7416d0915e5f7483d8e50e9.mp3",
+      "bytes": 151725,
+      "durationSeconds": 18.936,
+      "codec": "mp3",
+      "sampleRate": 24000,
+      "channels": 1
+    },
     "904e35328c21ab2fa932aab948f92f2f25d058fe84120201e821ac3c11d67755": {
       "text": "선택한 사진 카드. 무대 밖의 여유 출처. 물고기뮤직 공식 갤러리 사진과 앨범 이미지의 권리는 원권리자에게 있어요. 개인 찜 기록은 읽지 않아요.",
       "src": "./voice-clips/904e35328c21ab2fa932aab948f92f2f25d058fe84120201e821ac3c11d67755.mp3",
@@ -1474,6 +1492,15 @@
       "sampleRate": 24000,
       "channels": 1
     },
+    "e5f2e17091a6143be73eb1a5e6a63f0f37fcdc7870decce575fbfcda1bdabbc1": {
+      "text": "은자야, 잘 자. 좋은 꿈 꿔. 오늘 하루도 고생했어.",
+      "src": "./voice-clips/e5f2e17091a6143be73eb1a5e6a63f0f37fcdc7870decce575fbfcda1bdabbc1.mp3",
+      "bytes": 32109,
+      "durationSeconds": 3.984,
+      "codec": "mp3",
+      "sampleRate": 24000,
+      "channels": 1
+    },
     "e5f91e2da413ddc0cda8a76ce86d42e6eafb53fed3e9d387b03186198f9774fd": {
       "text": "119에 알려요. 앱 운동으로 해결하려 하지 말고, 곁에 있는 사람에게도 도움을 청해요. 질환·틀니·삼킴 불편·영양상태에 따라 맞는 식사가 달라요. 의료진의 개인별 지시가 우선이에요. 두부. 콩제품으로 고를 수 있는 단백질 식품이에요. 달걀. 식사에 곁들일 수 있는 단백질 식품이에요.",
       "src": "./voice-clips/e5f91e2da413ddc0cda8a76ce86d42e6eafb53fed3e9d387b03186198f9774fd.mp3",
@@ -1654,6 +1681,15 @@
       "sampleRate": 24000,
       "channels": 1
     },
+    "fb5bd0d73d12e8619cffd6cce820dea8deef10f7ec0b9058b0bcad42143f5b62": {
+      "text": "좋은 아침이야, 은자야.",
+      "src": "./voice-clips/fb5bd0d73d12e8619cffd6cce820dea8deef10f7ec0b9058b0bcad42143f5b62.mp3",
+      "bytes": 19245,
+      "durationSeconds": 2.376,
+      "codec": "mp3",
+      "sampleRate": 24000,
+      "channels": 1
+    },
     "fbcf89e642a0e007dca5ee3704732421399e6f32fd09293dfaca29332dd2bbe4": {
       "text": "임영웅의 IM HERO 2가 발매된 해는?. 2025년. 발매일은 2025년 8월 29일이에요.",
       "src": "./voice-clips/fbcf89e642a0e007dca5ee3704732421399e6f32fd09293dfaca29332dd2bbe4.mp3",
@@ -1706,6 +1742,24 @@
       "text": "AI로 만든 팬 인사예요. 반가워요. 좋아하는 노래 한 곡 들으며 잠깐 쉬어 가세요. 오늘도 편안한 하루 보내세요.",
       "chunks": [
         "d1e592de9456e2ca39101827aad8834425019f1aa265cb93c0926df6272c2e64"
+      ],
+      "partial": false,
+      "complete": true
+    },
+    {
+      "id": "greeting-eunja-morning",
+      "text": "좋은 아침이야, 은자야.",
+      "chunks": [
+        "fb5bd0d73d12e8619cffd6cce820dea8deef10f7ec0b9058b0bcad42143f5b62"
+      ],
+      "partial": false,
+      "complete": true
+    },
+    {
+      "id": "greeting-eunja-night",
+      "text": "은자야, 잘 자. 좋은 꿈 꿔. 오늘 하루도 고생했어.",
+      "chunks": [
+        "e5f2e17091a6143be73eb1a5e6a63f0f37fcdc7870decce575fbfcda1bdabbc1"
       ],
       "partial": false,
       "complete": true
@@ -3232,10 +3286,10 @@
     },
     {
       "id": "companion-public",
-      "text": "팬메이드 동행 도우미예요. 실제 임영웅님과의 대화가 아니에요. 제공된 AI 샘플을 이용한 합성 안내이며 실제 임영웅의 녹음이나 발언이 아니에요. 오늘도 천천히, 작은 즐거움 하나를 찾아봐요. 쉬는 것도 소중한 하루의 일부예요. 가족이나 친구에게 반가운 안부를 건네도 좋아요. 내 이름과 대화 내용, 개인 일정과 할 일은 음성으로 읽거나 외부 서비스로 보내지 않아요.",
+      "text": "팬메이드 동행 도우미예요. 실제 임영웅님과의 대화가 아니에요. 제공된 AI 샘플을 이용한 합성 안내이며 실제 임영웅의 녹음이나 발언이 아니에요. 오늘도 천천히, 작은 즐거움 하나를 찾아봐요. 쉬는 것도 소중한 하루의 일부예요. 가족이나 친구에게 반가운 안부를 건네도 좋아요. 가족이 요청해 미리 만든 두 인사에는 정해진 호칭이 들어가요. 앱에 입력한 이름과 대화 내용, 개인 일정과 할 일은 읽거나 외부 서비스로 보내지 않아요.",
       "chunks": [
-        "bb52dab6e7dc75d1998b09b4a9e048719c057c87d726ece93db663ab312086e0",
-        "4bc5ead78a07d83d12cbb0104dba7ef55793ee9cbf09a3c63fa89d0a1261fb28"
+        "8f92559a89e4122d5dfc1a52350e9e65af73cc48a7416d0915e5f7483d8e50e9",
+        "214d29cd7b5b01f122b1d23289ae753479be032c016ce44ea8c9677b730a94ee"
       ],
       "partial": false,
       "complete": true
