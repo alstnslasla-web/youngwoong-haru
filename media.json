@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-27",
+  "updatedAt": "2026-11-28",
   "checkedAt": "2026-11-25T06:46:17.717Z",
   "sourceName": "물고기뮤직·임영웅 공식 YouTube",
   "videos": [
@@ -834,21 +834,21 @@
     },
     {
       "id": "youtube-rss",
-      "label": "공식 YouTube 자동확인 · 마지막 정상 자료 유지",
+      "label": "공식 YouTube 자동확인",
       "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UC3WZlO2Zl8NE1yIUgtwUtQw",
-      "status": "unavailable",
-      "attemptedAt": "2026-11-27T06:28:23.211Z",
-      "lastSuccessAt": "2026-11-26T06:37:55.543Z",
-      "error": "HTTP 503"
+      "status": "verified",
+      "attemptedAt": "2026-11-28T06:04:06.419Z",
+      "date": "2026-11-28T06:04:06.419Z",
+      "lastSuccessAt": "2026-11-28T06:04:06.419Z"
     },
     {
       "id": "official-gallery",
       "label": "공식 갤러리 자동확인 · 마지막 정상 자료 유지",
       "url": "https://www.mulgogimusic.com/",
       "status": "unavailable",
-      "attemptedAt": "2026-11-27T06:28:23.211Z",
+      "attemptedAt": "2026-11-28T06:04:06.419Z",
       "lastSuccessAt": "2026-11-25T06:46:17.717Z",
-      "error": "HTTP 403"
+      "error": "source unavailable or invalid"
     }
   ]
 }
